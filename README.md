@@ -8,6 +8,7 @@ otoritatif (`ardith666/<nama>`).
 
 | Skill | Fungsi | Repo sumber |
 |---|---|---|
+| `obsidian-notes` | Aturan menulis note di vault Obsidian (iCloud) — frontmatter wajib, wikilink internal, markdown link eksternal, INDEX.md + LOG.md per folder | repo ini (snapshot) |
 | `mk-iticm` | Orkestrator (entry point) — bangun perangkat pembelajaran lengkap dari RPS: slides, kode, jobsheet, bank soal, penugasan, studi kasus, paket LMS (OBE) | https://github.com/ardith666/mk-iticm |
 | `pptx-iticm` | Generator deck PowerPoint branded ITICM (dark navy + orange, OBE, diagram) | https://github.com/ardith666/pptx-iticm |
 | `dev-methodology` | Workflow pengembangan terstruktur: spesifikasi → plan → implementasi → review → knowledge (Fable loop + Obsidian) | https://github.com/ardith666/dev-methodology |
