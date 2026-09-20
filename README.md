@@ -14,8 +14,20 @@ otoritatif (`ardith666/<nama>`).
 | `pptx-iticm` | Generator deck PowerPoint branded ITICM (dark navy + orange, OBE, diagram) | https://github.com/ardith666/pptx-iticm |
 | `dev-methodology` | Workflow pengembangan terstruktur: spesifikasi → plan → implementasi → review → knowledge (Fable loop + Obsidian) | https://github.com/ardith666/dev-methodology |
 | `uiux-methodology` | Intelijen desain UI/UX: design system, brand identity, palet, font pairing, 99+ UX guidelines, 21st.dev MCP | https://github.com/ardith666/uiux-methodology |
+| `diagram-design` | 39 tipe diagram editorial, output HTML+SVG self-contained, bisa redraw Mermaid/draw.io | https://github.com/ardith666/diagram-design |
 
-## Instalasi di Mesin Baru
+## Bootstrap Otomatis (setup.sh)
+
+Clone repo ini, lalu jalankan `setup.sh` — symlink semua skill yang punya `SKILL.md` di root ke `~/.agents/skills/`:
+
+```bash
+git clone https://github.com/ardith666/skills.git /tmp/skills
+/tmp/skills/setup.sh   # SKILLS_DIR bisa di-override via env
+```
+
+Skill yang sudah ada sebagai folder asli (bukan symlink) di-skip. Detail: `./setup.sh`
+
+## Instalasi Manual di Mesin Baru
 
 Clone reponya (langsung dari repo sumber atau dari sini) ke folder skills agent:
 
@@ -27,6 +39,7 @@ git clone https://github.com/ardith666/dev-methodology      "$SKILLS_DIR/dev-met
 git clone https://github.com/ardith666/uiux-methodology     "$SKILLS_DIR/uiux-methodology"
 git clone https://github.com/ardith666/obsidian-notes       "$SKILLS_DIR/obsidian-notes"
 git clone https://github.com/ardith666/drawthings-adobestock "$SKILLS_DIR/drawthings-adobestock"
+git clone https://github.com/ardith666/diagram-design      "$SKILLS_DIR/diagram-design"
 ```
 
 Lihat `SKILL.md` di masing-masing skill untuk `REQUIRED BACKGROUND` / dependensi
@@ -50,11 +63,17 @@ uiux-methodology (independen)
 Untuk menyegarkan copy di repo ini:
 
 ```bash
-for s in mk-iticm pptx-iticm dev-methodology uiux-methodology; do
+for s in mk-iticm pptx-iticm dev-methodology uiux-methodology obsidian-notes drawthings-adobestock; do
   rsync -a --exclude '.git' --exclude '__pycache__' --exclude '*.pyc' --exclude '.env' \
     "${HOME}/.agents/skills/$s/" "skills/$s/"
 done
-git add -A && git commit -m "sync snapshot" && git push
+```
+
+`diagram-design` di-sync dari mirror terpisah (`~/code/diagram-design-mirror`, bare clone
+upstream cathrynlavery/diagram-design) via `./sync.sh` — bukan dari `~/.agents/skills/`:
+
+```bash
+./sync.sh   # sync mirror -> push ardith666/diagram-design -> refresh snapshot di sini
 ```
 
 ## Keamanan
@@ -74,4 +93,6 @@ git add -A && git commit -m "sync snapshot" && git push
 | **Gambar stock / konten visual (Adobe Stock)** | `drawthings-adobestock` | DrawThings → upscale 4MP → XMP metadata (JPEG/PNG transparan) |
 
 > **RPS kampus = jalur lengkap:** `mk-iticm` memanggil `pptx-iticm`, `dev-methodology`, dan `obsidian-notes` di dalam alurnya — cek `SKILL.md` masing-masing utk dependency.
-> **Diagram:** `diagram-design` dikelola via `agent-skills` (submodule mirror), bukan di repo ini.
+> **Diagram:** `diagram-design` = snapshot flat di repo ini (folder `diagram-design/`),
+di-sync via `./sync.sh` dari mirror `ardith666/diagram-design` (upstream
+cathrynlavery/diagram-design).
