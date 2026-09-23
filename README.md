@@ -15,6 +15,7 @@ otoritatif (`ardith666/<nama>`).
 | `dev-methodology` | Workflow pengembangan terstruktur: spesifikasi → plan → implementasi → review → knowledge (Fable loop + Obsidian) | https://github.com/ardith666/dev-methodology |
 | `uiux-methodology` | Intelijen desain UI/UX: design system, brand identity, palet, font pairing, 99+ UX guidelines, 21st.dev MCP | https://github.com/ardith666/uiux-methodology |
 | `diagram-design` | 39 tipe diagram editorial, output HTML+SVG self-contained, bisa redraw Mermaid/draw.io | https://github.com/ardith666/diagram-design |
+| `security-meth` | Audit keamanan source-first 6 fase (recon → coverage hunting → validasi → output terstruktur → verifikasi independen → report), fork cloudflare/security-audit-skill (MIT) | https://github.com/ardith666/security-meth |
 
 ## Bootstrap Otomatis (setup.sh)
 
@@ -40,6 +41,7 @@ git clone https://github.com/ardith666/uiux-methodology     "$SKILLS_DIR/uiux-me
 git clone https://github.com/ardith666/obsidian-notes       "$SKILLS_DIR/obsidian-notes"
 git clone https://github.com/ardith666/drawthings-adobestock "$SKILLS_DIR/drawthings-adobestock"
 git clone https://github.com/ardith666/diagram-design      "$SKILLS_DIR/diagram-design"
+git clone https://github.com/ardith666/security-meth        "$SKILLS_DIR/security-meth"
 ```
 
 Lihat `SKILL.md` di masing-masing skill untuk `REQUIRED BACKGROUND` / dependensi
@@ -56,6 +58,7 @@ mk-iticm (entry point, orkestrasi 5 phase)
 
 pptx-iticm (mandiri, bisa dipakai tanpa mk-iticm untuk edit/generate deck)
 uiux-methodology (independen)
+security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat pentest aktif)
 ```
 
 ## Update Snapshot
@@ -91,6 +94,7 @@ upstream cathrynlavery/diagram-design) via `./sync.sh` — bukan dari `~/.agents
 | **Desain UI/UX** | `uiux-methodology` | Design system, brand identity, palet, font pairing, UX guidelines, 21st.dev |
 | **Catatan/knowledge base (Obsidian)** | `obsidian-notes` | Frontmatter wajib, wikilink, INDEX.md, LOG.md — konsisten antar agent |
 | **Gambar stock / konten visual (Adobe Stock)** | `drawthings-adobestock` | DrawThings → upscale 4MP → XMP metadata (JPEG/PNG transparan) |
+| **Security audit / review keamanan** | `security-meth` (+ `dev-methodology` Phase 2/5 hook) | Source-first 6 fase: recon → coverage hunting → validasi adversarial → findings.json + REPORT.md. Pentest aktif terpisah: `penetration-testing-with-strix` |
 
 > **RPS kampus = jalur lengkap:** `mk-iticm` memanggil `pptx-iticm`, `dev-methodology`, dan `obsidian-notes` di dalam alurnya — cek `SKILL.md` masing-masing utk dependency.
 > **Diagram:** `diagram-design` = snapshot flat di repo ini (folder `diagram-design/`),
