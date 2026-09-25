@@ -1,13 +1,18 @@
 ---
 name: "Powerpoint / PPTX ITICM"
 slug: pptx-iticm
-version: 4.0.0
+version: 4.1.0
 description: "Branded PowerPoint generator untuk ITICM — dark theme, OBE-based. Logo, nama dosen, tugas, code snippet, diagram."
 ---
 
 # PPTX ITICM (Dark Theme, OBE)
 
 Branded PowerPoint generator untuk ITICM. Dark navy + orange accent + Calibri. RPS berbasis OBE — tiap presentasi wajib ada tugas.
+
+> **CANON ATURAN: `references/slide-rules.md`** — bacakan SEKALI penuh sebelum
+> generate apa pun (aturan di SKILL.md ini ringkasan; slide-rules menang bila
+> bertentangan). Setelah generate, jalankan `scripts/check_deck.py` (FAIL 0) dan
+> fresh-eyes review (`references/content-review-prompt.md`).
 
 ## Trigger
 
@@ -57,9 +62,13 @@ Contoh + tugas (10-11) wajib. Diagram wajib bila materi membahas flowchart/seque
 
 **Isi tiap slot mengikuti kesepakatan stack/pendekatan di knowledge/** (lihat "Filosofi konten" di bawah) — mis. course implementasi web memakai pola request → engine → response.
 
-## Target Kedalaman (minimal 20 slide per deck materi)
+## Target Kedalaman (berbasis DATA — tanpa batas atas slide)
 
-JANGAN rangkum 1 topik dalam <20 slide (<20 = gagal). Pola slot wajib:
+Kedalaman diukur dari isi, bukan jumlah slide (slide-rules §9). **TIDAK ada batas atas**:
+deck materi biasanya ≥20 slide dan boleh 25–35+ bila materi kaya data. Yang dilarang adalah
+menambah slide untuk menipiskan topik.
+
+**Kerangka inti wajib (minimal — boleh plus):**
 
 ```
 1 Title · 2 Split (definisi+analogi) · 3-4 Cards (1/2, 2/2)
@@ -69,9 +78,20 @@ JANGAN rangkum 1 topik dalam <20 slide (<20 = gagal). Pola slot wajib:
 17 Contoh soal · 18 Tugas (+B bila milestone) · 19 Ringkasan · 20 Referensi · 21 Closing
 ```
 
-Deck algoritma (ada implementasi kode): WAJIB +1 slide "Studi Kasus: Perhitungan Manual" — contoh hitungan angka langkah-demi-langkah (trace tabel, jarak, voting, SSE) — ditaruh SEBELUM Code 1, sesudah Diagram. Deck boleh >21 slide.
+**Lapisan data (perluas DI SINI, bukan menambah bullet saja):**
+- Tiap slide konten wajib memuat minimal satu unsur data: tabel, angka konkret berunit,
+  dataset, contoh perhitungan bertahap, kode + output dijalankan, kasus nyata, atau
+  perbandingan multi-dimensi. Slide yang cuma 1–2 bullet singkat tanpa data = slide "tipis" =
+  pelanggaran (check_deck memberi WARN, slide-rules §9.3).
+- Perluas satu topik dengan membuka dimensi: definisi → mekanisme → contoh angka →
+  studi kasus perhitungan manual → implementasi kode + output → analisis hasil → latihan.
+  Setiap dimensi boleh 1+ slide, masing-masing berbahan data nyata.
+- Deck algoritma: WAJIB slide "Studi Kasus: Perhitungan Manual" (trace angka langkah
+  demi-langkah: tabel, jarak, voting, SSE, cost) SEBELUM Code 1. Slide ini wajib ada angka
+  yang bisa diikuti mahasiswa dari nol (contoh: A* cost = 4, akurasi 93.3%, SSE 0.76).
 
-Deck ujian (UTS/UAS) boleh ramping (±8-12 slide, tanpa tugas baru).
+Deck ujian (UTS/UAS) boleh ramping (±8-12 slide, tanpa tugas baru) — pembebasan dari aturan
+kedalaman, tapi struktur/judul tetap ikut slide-rules.
 
 ## Layout Rules (V3 — gaya referensi terukur)
 
@@ -81,6 +101,14 @@ Deck ujian (UTS/UAS) boleh ramping (±8-12 slide, tanpa tugas baru).
 - Logo hanya title + closing. Slide konten hanya label `iticm.ac.id`.
 - Kode: Consolas, panel gelap rounded, teks `#c0c5d0`.
 - Rincian tiap konsep dapat slide pendalaman (`add_explain_slide`: 2-3 kalimat + tips 💡).
+
+## Penamaan Deck (standar konsisten — audit 2026-09-19)
+
+Format kebab lowercase, satu konvensi untuk semua MK (lihat skill `mk-iticm` → Konvensi Penamaan / standarisasi-struktur-mk di vault Obsidian):
+
+- `p00-pengantar-kontrak-kuliah.pptx`, `p01-konsep-dasar-….pptx`, `p08-uts.pptx`, `p16-uas.pptx`
+- DILARANG: `P00_Pengantar_…`, `P01-Konsep-Dasar-…` (campuran casing/underscore)
+- Setiap deck WAJIB punya export PDF di `pptx/pdf/` dengan nama sama (audit fase 5: nama PDF == nama deck).
 
 ## Workflow
 
@@ -99,7 +127,7 @@ Deck ujian (UTS/UAS) boleh ramping (±8-12 slide, tanpa tugas baru).
     Draft"), termasuk stack & pola implementasi. Ini jadi acuan saat bikin draft.
 [3] Buat SATU file draft: pptx/draft/draft-pertemuan.md
     - 17 deck (P00 = pengantar/kontrak-kuliah, P01–P16 = pertemuan)
-    - Filename target pakai prefix konsisten: P##-nama-slug (contoh: P01-pengenalan-ai.pptx)
+    - Filename target pakai prefix konsisten: pXX-slug lowercase (contoh: p01-pengenalan-ai.pptx, p00-pengantar-kontrak-kuliah.pptx)
     - Isi mengikuti kesepakatan di knowledge/ (stack + pendekatan)
 [4] Setiap slide konten (2..sebelum Ringkasan/Tugas) WAJIB punya:
     - Heading `### Slide N — <Judul slot>` (Title/Cards/List/Steps/Explain/Contoh/Diagram/Code/Contoh Soal)
@@ -108,7 +136,10 @@ Deck ujian (UTS/UAS) boleh ramping (±8-12 slide, tanpa tugas baru).
     - Body: konten slide (bullets/tabel/kode) sesuai slot V3
 [5] USER REVIEW draft → diskusi → revisi sampai final
 [6] Generate file .pptx dari draft (pakai iticm_base V3)
-[7] Verify: slide count, logo, ≤3 kartu, code Consolas
+[7] Verify:
+    - `python3 scripts/check_deck.py pptx/Pxx-*.pptx` → **FAIL 0** + baca semua WARN
+    - Daftar judul dibaca berurutan → satu cerita (slide-rules §2.6)
+    - fresh-eyes review via references/content-review-prompt.md → tabel terima/tolak → perbaiki
 [8] Multi-agent untuk komponen lain
 ```
 
@@ -167,7 +198,7 @@ Untuk course teori murni (tanpa bahasa), slot-slot di atas kembali ke penjelasan
 ```markdown
 ## P01 — <Judul Pertemuan>
 
-**File:** `P01-nama-slug.pptx`
+**File:** `p01-nama-slug.pptx`
 **Sub-CPMK:** Sub-CPMKx | **Bobot:** x% | **Tipe:** Kuliah/Praktikum
 
 ### Slide 1 — Title
@@ -244,11 +275,14 @@ Kuliah flowchart: draw.io wajib. Lainnya: mermaid cukup.
 
 ## Rules
 
+- WAJIB baca `references/slide-rules.md` penuh sebelum generate (canon; menang bila bertentangan dgn SKILL.md)
+- WAJIB jalankan `scripts/check_deck.py` → FAIL 0 sebelum serah terima; WARN dibaca & dievaluasi
+- WAJIB fresh-eyes review (`references/content-review-prompt.md`) → tabel terima/tolak; 1 rally lalu tanya user
 - WAJIB diskusi + catat stack/pendekatan di knowledge/ sebelum draft (bukan asumsi skill)
 - WAJIB draft berdasarkan knowledge → user review final → baru generate
 - WAJIB narasi panjang (> 3 kalimat) per slide konten — bukan label pendek
 - WAJIB pakai helper functions
-- WAJIB ≥20 slide per deck materi (lihat Target Kedalaman) — <20 slide = gagal
+- WAJIB deck materi berisi data nyata per slide (tabel/angka/dataset/contoh/output) — tanpa batas atas slide; slide "tipis" = pelanggaran (slide-rules §9)
 - WAJIB ada tugas OBE (minimal 1 slide)
 - Sebelum tugas: kasih contoh pengerjaan
 - Maks 3 kartu per slide — pecah materi panjang
@@ -262,6 +296,11 @@ Kuliah flowchart: draw.io wajib. Lainnya: mermaid cukup.
 ```
 pptx-iticm/
 ├── SKILL.md
+├── references/
+│   ├── slide-rules.md          # CANON aturan (bacakan tiap generate; tumbuh dari review)
+│   └── content-review-prompt.md# fresh-eyes review
+├── scripts/
+│   └── check_deck.py           # pemeriksa mekanis PPTX → FAIL 0
 ├── templates/
 │   └── iticm_base.py
 └── assets/
