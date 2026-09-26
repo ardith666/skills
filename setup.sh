@@ -8,7 +8,7 @@ DEST="${AGENT_SKILLS_DIR:-$HOME/.agents/skills}"
 
 mkdir -p "$DEST"
 
-for skill in diagram-design dev-methodology security-meth drawthings-adobestock mk-iticm obsidian-notes pptx-iticm uiux-methodology; do
+for skill in diagram-design dev-methodology security-meth mk-iticm obsidian-notes pptx-iticm uiux-methodology; do
   if [ ! -f "$SRC/$skill/SKILL.md" ]; then
     echo "skip $skill: SKILL.md tidak ada di $SRC/$skill/"
     continue

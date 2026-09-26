@@ -8,7 +8,6 @@ otoritatif (`ardith666/<nama>`).
 
 | Skill | Fungsi | Repo sumber |
 |---|---|---|
-| `drawthings-adobestock` | Generate gambar stock (Adobe Stock) via DrawThings API → upscale 4MP → embed XMP metadata (JPEG/PNG transparan) | https://github.com/ardith666/drawthings-adobestock |
 | `obsidian-notes` | Aturan menulis note di vault Obsidian (iCloud) — frontmatter wajib, wikilink internal, markdown link eksternal, INDEX.md + LOG.md per folder | https://github.com/ardith666/obsidian-notes |
 | `mk-iticm` | Orkestrator (entry point) — bangun perangkat pembelajaran lengkap dari RPS: slides, kode, jobsheet, bank soal, penugasan, studi kasus, paket LMS (OBE) | https://github.com/ardith666/mk-iticm |
 | `pptx-iticm` | Generator deck PowerPoint branded ITICM (dark navy + orange, OBE, diagram) | https://github.com/ardith666/pptx-iticm |
@@ -39,7 +38,6 @@ git clone https://github.com/ardith666/pptx-iticm           "$SKILLS_DIR/pptx-it
 git clone https://github.com/ardith666/dev-methodology      "$SKILLS_DIR/dev-methodology"
 git clone https://github.com/ardith666/uiux-methodology     "$SKILLS_DIR/uiux-methodology"
 git clone https://github.com/ardith666/obsidian-notes       "$SKILLS_DIR/obsidian-notes"
-git clone https://github.com/ardith666/drawthings-adobestock "$SKILLS_DIR/drawthings-adobestock"
 git clone https://github.com/ardith666/diagram-design      "$SKILLS_DIR/diagram-design"
 git clone https://github.com/ardith666/security-meth        "$SKILLS_DIR/security-meth"
 ```
@@ -66,7 +64,7 @@ security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat 
 Untuk menyegarkan copy di repo ini:
 
 ```bash
-for s in mk-iticm pptx-iticm dev-methodology uiux-methodology obsidian-notes drawthings-adobestock; do
+for s in mk-iticm pptx-iticm dev-methodology uiux-methodology obsidian-notes; do
   rsync -a --exclude '.git' --exclude '__pycache__' --exclude '*.pyc' --exclude '.env' \
     "${HOME}/.agents/skills/$s/" "skills/$s/"
 done
@@ -93,7 +91,6 @@ upstream cathrynlavery/diagram-design) via `./sync.sh` — bukan dari `~/.agents
 | **Coding assistant / workflow dev** | `dev-methodology` (+ `diagram-design` utk diagram) | Spek → plan → implementasi → review → knowledge (Fable loop + checkpointing) |
 | **Desain UI/UX** | `uiux-methodology` | Design system, brand identity, palet, font pairing, UX guidelines, 21st.dev |
 | **Catatan/knowledge base (Obsidian)** | `obsidian-notes` | Frontmatter wajib, wikilink, INDEX.md, LOG.md — konsisten antar agent |
-| **Gambar stock / konten visual (Adobe Stock)** | `drawthings-adobestock` | DrawThings → upscale 4MP → XMP metadata (JPEG/PNG transparan) |
 | **Security audit / review keamanan** | `security-meth` (+ `dev-methodology` Phase 2/5 hook) | Source-first 6 fase: recon → coverage hunting → validasi adversarial → findings.json + REPORT.md. Pentest aktif terpisah: `penetration-testing-with-strix` |
 
 > **RPS kampus = jalur lengkap:** `mk-iticm` memanggil `pptx-iticm`, `dev-methodology`, dan `obsidian-notes` di dalam alurnya — cek `SKILL.md` masing-masing utk dependency.
