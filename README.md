@@ -64,7 +64,7 @@ security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat 
 Untuk menyegarkan copy di repo ini:
 
 ```bash
-for s in mk-iticm pptx-iticm dev-methodology uiux-methodology obsidian-notes; do
+for s in mk-iticm pptx-iticm dev-methodology uiux-methodology obsidian-notes security-meth; do
   rsync -a --exclude '.git' --exclude '__pycache__' --exclude '*.pyc' --exclude '.env' \
     "${HOME}/.agents/skills/$s/" "skills/$s/"
 done
