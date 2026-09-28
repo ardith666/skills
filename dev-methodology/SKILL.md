@@ -1,7 +1,7 @@
 ---
 name: dev-methodology
-version: 3.1.1
-description: "Structured software development workflow: ask → spec → plan → implement → test → review → knowledge, dengan Fable execution loop (classify → define done → evidence → decide → act → verify → report) + Obsidian Integration (vault-native knowledge, retain via vault). Use when building, creating, or implementing something."
+version: 3.2.0
+description: "Structured software development workflow: ask → spec → plan → implement → test → review → knowledge, dengan Fable execution loop (classify → define done → evidence → decide → act → verify → report) + Obsidian Integration (vault-native knowledge, retain via vault) + Wiki Pattern (source contract, index retrieval, lint). Use when building, creating, or implementing something."
 ---
 
 # Dev Methodology
@@ -77,7 +77,7 @@ Scope ambigu: kalau cuma user yang bisa mutusin → tanya SATU pertanyaan pointe
 
 Satu-dua kalimat ke user: done itu seperti apa dan gimana diverifikasi. Task: observasi konkret ("test ini pass", "build tetap hijau", "angka ini berubah", "halaman ini render"). Question/assessment: tiap klaim bisa di-trace ke file+baris atau command output. Plan-first: plan yang bisa di-approve, verifikasi per step.
 
-State load-bearing assumptions. Kalau setelah baca ulang request masih gak bisa nyebut verifikasi → tanya user satu pertanyaan spesifik, jangan lanjut.
+State load-bearing assumptions. Kalau setelah baca ulang request masih gak bisa nyebut verifikasi → tanya user satu pertanyaan spesifik, jangan lanjut. Task yang nyentuh web/API/auth/input: masukkan `security-meth` audit clean ke definisi done (atau catat `PENDING: security audit` kalau belum dijalankan) — hook di Phase 5.
 
 ### Step 2 — Gather evidence
 
@@ -102,7 +102,7 @@ Namain scope: file/surface yang bakal disentuh. Butuh sesuatu di luar scope mid-
 
 1. **Intent gate, sebelum edit behavior.** Tulis: `INTENT: code does <X>; the failing check/task expects <Y>; the spec (README/docs/docstring) says <Z>`. WAJIB beneran buka README/docs/docstring buat isi slot Z; kalau behavior berubah, line ini muncul verbatim di report. X/Y/Z gak cocok → JANGAN edit dulu: ketidakcocokan itu temuannya. Authority order: explicit user statement > spec > tests > code behavior. Framing task kayak "fix the code" / "make the tests pass" BUKAN statement of intended behavior; gak menaikkan tests di atas spec.
 2. **AUTH gate** — lihat Step 3. Aksi irreversible/outward butuh `AUTH: user said "..."`.
-3. **Recall gate, sebelum pertama kali pakai apa pun yang belum dibuka sesi ini.** API signature, endpoint, config key, harga, angka, regulasi dari memory = bukan evidence. Buka sumbernya (docs, library source, halaman ter-fetch; budget 2 lookup), atau label di report "memory, unverified".
+3. **Recall gate, sebelum pertama kali pakai apa pun yang belum dibuka sesi ini.** API signature, endpoint, config key, harga, angka, regulasi dari memory = bukan evidence. Buka sumbernya (docs, library source, halaman ter-fetch; budget 2 lookup), atau label di report "memory, unverified". **API/library/framework usage → Context7 dulu:** `resolve-library-id` → `query-docs` (docs terkini + contoh kode valid), baru docs manual. Query miss → ganti library target / ubah query, jangan langsung turun ke hafalan.
 4. **Smallest correct change.** Sentuh cuma yang dibutuhin task. Match style existing. Precise edits > rewrite; rewrite file cuma kalau gue yang nulis sesi ini atau udah baca penuh.
 5. **Track multi-part work.** Task dengan 3+ step heterogen atau >~5 item mirip → checklist tertulis dulu, tick tiap selesai, audit terhadap ask asli sebelum report.
 6. **Jangan destroy tanpa lihat.** Sebelum hapus/overwrite, lihat isinya. Kontradiksi deskripsi → stop, surface.
@@ -192,6 +192,19 @@ Setiap project punya folder `knowledge/` sebagai **single source of truth**. Age
 - **Be specific** — "Used SQLite for simplicity, no server needed" not "Chose database"
 - **Read on start** — first action in any session: read `knowledge/KNOWLEDGE.md`
 
+### Wiki Pattern (source contract · index retrieval · lint)
+
+Schema knowledge lengkap: `references/wiki-pattern.md` — **WAJIB dibaca saat Phase 1** kalau project punya `knowledge/`. Empat aturan intinya:
+
+1. **Sumber immutable** — file sumber (`knowledge/research/`, RPS, data) tidak pernah diedit. Artikel yang diperbarui, bukan sumbernya.
+2. **Source contract** — tiap artikel knowledge (bukan `KNOWLEDGE.md`/`README.md`) wajib punya `**Source:** <path> · [YYYY-MM-DD] · fase: <phase>`, intro 2-4 kalimat, `## Key Takeaways`, `## Related` (wikilink). Nggak ada sumber → tulis di `## Open Questions`, jangan ditebak.
+3. **Index = lapisan retrieval** — query lewat `knowledge/README.md` → `knowledge/KNOWLEDGE.md` → artikel (1-3 file). Kalau butuh baca >4 file, index-nya yang bermasalah — perbaiki index, bukan baca semua.
+4. **`lint` = operasi resmi** — health check knowledge (kontradiksi / stale / orphan / missing cross-link / unsourced claim) → tulis report `knowledge/lint-reports/lint-YYYY-MM-DD.md`. **Tidak mengubah apa pun.** Fix masuk approval user satu per satu, tiap fix append 1 baris di `history.md`. Trigger: user bilang "lint"/"audit", atau Phase 6 sebelum handover.
+
+Riset web (Phase 2) mengikuti operasi Research di `references/wiki-pattern.md`: **satu URL = satu file** di `knowledge/research/` dengan frontmatter `url`/`fetched`/`summary` + konten penuh (bukan ringkasan). Jangan gabung 2 sumber dalam 1 file, jangan overwrite yang sudah ada.
+
+Skill lain (uiux-methodology, mk-iticm) pointer ke `references/wiki-pattern.md` — jangan salin aturan ke sana.
+
 ### ⛔ HARD RULES — output WAJIB masuk `knowledge/`
 
 Lokasi output agent **haram di luar `knowledge/`**. Berlaku untuk SEMUA artifact, dari skill apapun (dev-meth, uiux-meth, diagram-design, superpowers, dll):
@@ -243,6 +256,7 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 ### Phase 2: Spec
 - **Evidence rules** (Step 2): orient dulu, primary sources > memory, parallelize, time-box 2 round
 - **Intent sebelum behavior:** kalau ada test gagal, cek statement intent dulu — test bisa yang salah, bukan cuma kode
+- **Recon security (task nyentuh web/API/auth/input):** jalankan `security-meth` Phase 1 recon (architecture.md + trust boundaries + coverage ledger) sebagai bagian evidence — atau catat `PENDING: security recon` kalau di-skip. Ini nentuin done criteria Phase 1 + arah hunting Phase 5.
 - Write minimal spec using template below
 - Show in digestible chunks (not walls of text)
 - Get explicit approval before proceeding
@@ -276,11 +290,11 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 - **Verify by observation** — jalankan/dilihat, bukan disimpulkan dari baca kode
 - Run all tests; manual smoke test if applicable
 - **Twin check** kalau fix defect — search pattern yang sama di seluruh project
-- **Security scan (opsional — WAJIB tanya user dulu):** kalau task nyentuh web/API/auth/input handling, tawarkan pentest:
-  1. Info user: skill `penetration-testing-with-strix` butuh install (`npx skills add usestrix/strix --skill penetration-testing-with-strix --yes`) + Docker jalan + LLM API key
-  2. Kasih 2 pilihan: **[1] setup sekarang** / **[2] skip**
-  3. Setup → install + jalankan; findings → `fix-security-vulnerabilities-with-strix`. Skip → lanjut, catat `PENDING: security scan di-skip - user pilih skip`
-  4. Kalau setup gagal (Docker/key gak ada) → jangan maksa, jangan pura-pura scan: `PENDING: security scan gagal setup - <alasan>`
+- **Security scan (opsional — WAJIB tanya user dulu):** kalau task nyentuh web/API/auth/input handling, tawarkan audit. Dua jalur komplementer:
+  1. **[1] security-meth** (audit source-first) — recon → coverage hunting → validasi adversarial → `findings.json` + `REPORT.md` (divalidasi `report-schema.json`, validator Node zero-dep). Syarat: Node.js + sandbox OS-enforced (tanpa sandbox, temuan cuma `needs_validation`, gak bisa confirm). Hasil → `knowledge/security-audit/`
+  2. **[2] strix** (pentest aktif) — `npx skills add usestrix/strix --skill penetration-testing-with-strix --yes`, butuh Docker jalan + LLM API key. Findings → `fix-security-vulnerabilities-with-strix`
+  3. **[3] skip** — lanjut, catat `PENDING: security scan di-skip - user pilih skip`
+  Setup gagal (Docker/key/sandbox gak ada) → jangan maksa, jangan pura-pura scan: `PENDING: security scan gagal setup - <alasan>`
 - **Hard bound:** 3 siklus fix-verify gagal → stop, hand back ke user
 - Report pass/fail per task
 - Verify against spec requirements
@@ -311,7 +325,9 @@ Skill-skill berikut dipakai sebagai quality gate opsional — bukan bundel, tapi
 |---|---|---|---|---|
 | `penetration-testing-with-strix` | usestrix/strix | Phase 5: task nyentuh web/API/auth/input | `npx skills add usestrix/strix --skill penetration-testing-with-strix --yes` | ✅ WAJIB (butuh Docker + LLM API key) |
 | `no-ai-slop` | petergyang/no-ai-slop | Phase 6: output user-facing writing | `npx skills add petergyang/no-ai-slop --skill no-ai-slop --yes` | ❌ gak perlu (cuma file rules) |
-| `diagram-design` | ardith666/diagram-design (mirror upstream cathrynlavery) | Phase 2: diagram arsitektur/ER/data-flow buat spec. Phase 4: diagram dependency/deployment buat docs. Phase 6: redraw Mermaid/draw.io existing ke editorial | via aggregator `ardith666/agent-skills` (`./setup.sh`) | ❌ gak perlu |
+| `context7` (context7-mcp) | upstash/context7 | Phase 2 & 4: docs library/framework/API terkini (`resolve-library-id` → `query-docs`) sebelum hafalan | MCP terkonfigurasi di OpenClaw (`openclaw mcp list`); skill `context7-mcp` di agent | ❌ gak perlu (remote MCP, tanpa install npm) |
+| `diagram-design` | ardith666/diagram-design (mirror upstream cathrynlavery) | Phase 2: diagram arsitektur/ER/data-flow buat spec. Phase 4: diagram dependency/deployment buat docs. Phase 6: redraw Mermaid/draw.io existing ke editorial | via aggregator `ardith666/skills` (`./setup.sh`) | ❌ gak perlu |
+| `security-meth` | ardith666/security-meth (fork cloudflare/security-audit-skill, MIT) | Phase 2 (done criteria) & Phase 5: audit keamanan source-first 6 fase (recon → coverage hunting → validasi adversarial → findings.json + REPORT.md) | via aggregator `ardith666/skills` (`./setup.sh`) atau `git clone https://github.com/ardith666/security-meth` | ✅ WAJIB (butuh Node + sandbox OS buat konfirmasi finding) |
 
 Kalau skill belum terinstall dan hook kepanggil: ikuti kebijakan di atas (tanya / auto-install). Kalau gak jadi jalan → catat `PENDING:` di report, jangan di-skip diam-diam.
 
@@ -358,6 +374,9 @@ Kalau task gak nyentuh API → section ini skip, gak perlu diimplement.
 - **Verify by observation:** claim harus dijalankan, bukan disimpulkan. 3 siklus gagal → stop, hand back
 - **Always read `knowledge/README.md` first in any new session** — entry point
 - **If `knowledge/README.md` doesn't exist, create it based on templates**
+- **Source contract** — artikel knowledge wajib `**Source:**` + `## Key Takeaways` + `## Related` (`references/wiki-pattern.md`)
+- **Query lewat index** — `README` → `KNOWLEDGE` → artikel. Jangan grep/glob semua file `knowledge/`
+- **Lint = report dulu** — health check tidak boleh mengubah file; tunggu approval per temuan
 - **Always update `knowledge/` files at every phase gate**
 - **⛔ HARD RULE:** semua artifact/output agent WAJIB masuk `knowledge/` — DILARANG bikin folder/file non-standar di luar `knowledge/` (lihat § Knowledge Capture → HARD RULES)
 
