@@ -11,6 +11,7 @@ otoritatif (`ardith666/<nama>`).
 | `obsidian-notes` | Aturan menulis note di vault Obsidian (iCloud) — frontmatter wajib, wikilink internal, markdown link eksternal, INDEX.md + LOG.md per folder | https://github.com/ardith666/obsidian-notes |
 | `mk-iticm` | Orkestrator (entry point) — bangun perangkat pembelajaran lengkap dari RPS: slides, kode, jobsheet, bank soal, penugasan, studi kasus, paket LMS (OBE) | https://github.com/ardith666/mk-iticm |
 | `pptx-iticm` | Generator deck PowerPoint branded ITICM (dark navy + orange, OBE, diagram) | https://github.com/ardith666/pptx-iticm |
+| `slidev-iticm` | Aturan utama deck HTML tunggal interaktif ITICM gaya P04 (hash nav, glosarium + jump, mermaid aman, persist) untuk semua MK | https://github.com/ardith666/slidev-iticm |
 | `dev-methodology` | Workflow pengembangan terstruktur: spesifikasi → plan → implementasi → review → knowledge (Fable loop + Obsidian) | https://github.com/ardith666/dev-methodology |
 | `uiux-methodology` | Intelijen desain UI/UX: design system, brand identity, palet, font pairing, 99+ UX guidelines, 21st.dev MCP | https://github.com/ardith666/uiux-methodology |
 | `diagram-design` | 39 tipe diagram editorial, output HTML+SVG self-contained, bisa redraw Mermaid/draw.io | https://github.com/ardith666/diagram-design |
@@ -35,6 +36,7 @@ Clone reponya (langsung dari repo sumber atau dari sini) ke folder skills agent:
 SKILLS_DIR="${HOME}/.agents/skills"
 git clone https://github.com/ardith666/mk-iticm            "$SKILLS_DIR/mk-iticm"
 git clone https://github.com/ardith666/pptx-iticm           "$SKILLS_DIR/pptx-iticm"
+git clone https://github.com/ardith666/slidev-iticm          "$SKILLS_DIR/slidev-iticm"
 git clone https://github.com/ardith666/dev-methodology      "$SKILLS_DIR/dev-methodology"
 git clone https://github.com/ardith666/uiux-methodology     "$SKILLS_DIR/uiux-methodology"
 git clone https://github.com/ardith666/obsidian-notes       "$SKILLS_DIR/obsidian-notes"
@@ -51,10 +53,11 @@ eksternal (mis. `mk-iticm` butuh `obra/superpowers` untuk `dispatching-parallel-
 ```
 mk-iticm (entry point, orkestrasi 5 phase)
 ├── butuh dev-methodology          → disiplin knowledge/ + history.md
-├── butuh pptx-iticm               → produksi deck (Phase 3)
+├── butuh pptx-iticm ATAU slidev-iticm → produksi deck (Phase 3, tanya dulu: slidev-html rich vs pptx)
 └── butuh dispatching-parallel-agents (superpowers) → fan-out 4 workstream
 
 pptx-iticm (mandiri, bisa dipakai tanpa mk-iticm untuk edit/generate deck)
+slidev-iticm (mandiri, deck HTML rich; isi/konsep mirip pptx-iticm, lebih rich interaktif)
 uiux-methodology (independen)
 security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat pentest aktif)
 ```
@@ -64,7 +67,7 @@ security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat 
 Untuk menyegarkan copy di repo ini:
 
 ```bash
-for s in mk-iticm pptx-iticm dev-methodology uiux-methodology obsidian-notes security-meth; do
+for s in mk-iticm pptx-iticm slidev-iticm dev-methodology uiux-methodology obsidian-notes security-meth; do
   rsync -a --exclude '.git' --exclude '__pycache__' --exclude '*.pyc' --exclude '.env' \
     "${HOME}/.agents/skills/$s/" "skills/$s/"
 done
@@ -87,7 +90,7 @@ upstream cathrynlavery/diagram-design) via `./sync.sh` — bukan dari `~/.agents
 | Kebutuhan | Skill yang dipakai | Keterangan |
 |---|---|---|
 | **Perangkat pembelajaran / RPS kampus (OBE)** | `mk-iticm` (orserkestrasi) + `pptx-iticm` (slide) + `dev-methodology` (knowledge) + `obsidian-notes` (catatan) | Satu paket lengkap: RPS → slides, kode, jobsheet, bank soal, penugasan, studi kasus, paket LMS |
-| **Slide/deck presentasi (branded ITICM)** | `pptx-iticm` | Dark navy + orange, alur OBE, diagram, kode |
+| **Slide/deck presentasi (branded ITICM)** | `pptx-iticm` ATAU `slidev-iticm` (pilih di Phase 3) | pptx = PowerPoint; slidev-html = HTML tunggal rich (hash nav, glosarium + jump, mermaid, persist), isi/konsep mirip, lebih rich di slidev-html |
 | **Coding assistant / workflow dev** | `dev-methodology` (+ `diagram-design` utk diagram) | Spek → plan → implementasi → review → knowledge (Fable loop + checkpointing) |
 | **Desain UI/UX** | `uiux-methodology` | Design system, brand identity, palet, font pairing, UX guidelines, 21st.dev |
 | **Catatan/knowledge base (Obsidian)** | `obsidian-notes` | Frontmatter wajib, wikilink, INDEX.md, LOG.md — konsisten antar agent |
