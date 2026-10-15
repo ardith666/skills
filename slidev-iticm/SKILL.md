@@ -21,6 +21,8 @@ Hasilkan deck HTML tunggal interaktif ala P04 untuk MK ITICM mana pun.
 10. **Kartu TM dari RPS** — salin teks resmi Tabel RPS (nama/sifat/isi/batas/nilai) ke slide tugas, tanpa menebak. Selesai saat dosen bisa audit ke RPS.
 11. **Rangkuman premium diagram-design** — tiap deck wajib 1+ slide rangkuman akhir berisi diagram editorial yang membedah semua konsep inti: dial `slide-16x9` + `faithful ≤24 zoned` + audience `mixed`, token ITICM (kartu putih aksen `#e86c00`), embed **inline SVG** (hanya node `<svg>`, buang wrapper/header/footer/script/fonts, prefix ID `rk-title/desc`, `width:100% height:auto`, max 720 + caption) + tombol `🔍 Perbesar` → **modal fullscreen** berisi varian detail/zoom (`+ - 0`, ESC/X tutup, ikut state `modal` langkah 5, hidden saat `?all=1` yang tercetak versi inline, hormat `prefers-reduced-motion`), split jadi `R1 overview + R2 detail per zona` jika >24 node atau >9 node tanpa zona, validasi `self_check.py` + `node --check`. Selesai saat versi cetak tampil inline dan modal zoom jalan di HP.
 
+12. **Humanizer ID (blader/humanizer https://github.com/blader/humanizer)** — cek tiap narasi/keypoint/caption: kalimat tuntas subjek-predikat lengkap tanpa gantung; buang tell AI-ID (kontras "tidak hanya...tetapi", pembuka "penting untuk dicatat", "selain itu" beruntun, frasa zaman, penutup template, triad, inflasi, kata mendalam/komprehensif/holistik/optimalisasi/memfasilitasi). Istilah asing asli jangan terjemah (forward chaining, database, primary key tetap Inggris, padanan Indonesia hanya di glosarium/caption). Selesai saat 0 kalimat gantung + 0 istilah aneh.
+
 ## Pitfalls
 
 - Replace `hang` merusak `changedTouches` jadi `ctidak meresponsedTouches` — fatal, lindungi `<script>`.
