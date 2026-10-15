@@ -52,4 +52,5 @@ Setiap proyek artikel WAJIB punya folder `<proyek>/knowledge/` sebagai memori be
 - Setiap DOI/nama/tahun diverifikasi; yang tak terkonfirmasi ditandai `[PERLU VERIFIKASI MANUAL]`.
 - LLM tidak boleh jadi co-author; cek AI-disclosure jurnal sebelum submit.
 - Humanizer pass: sebelum Tahap 13 (submit), jalankan skill humanizer mode file atas draf final; bila ada sampel tulisan user (`VOICE.md`/naskah sebelumnya di folder proyek), pakai sebagai acuan nada.
+- Dependensi .docx: officecli (instal + konvensi JUTISI di `tools/officecli.md`); dipakai Tahap 13 untuk membangun file .docx naskah.
 - Latar: Tahap 1–6 verbatim Notes ITICM/Penelitian "Aturan Promt"; Tahap 0, 7–13 lanjutan gaya sama. Pelajaran `jamditis/academic-writing`: `references/pelajaran-academic-writing.md`. Verifikasi sumber + IEEE (dari `endigo/academic-research-writer`): `references/verifikasi-sumber.md`, `references/format-ieee.md`.
