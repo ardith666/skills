@@ -16,7 +16,7 @@ otoritatif (`ardith666/<nama>`).
 | `uiux-methodology` | Intelijen desain UI/UX: design system, brand identity, palet, font pairing, 99+ UX guidelines, 21st.dev MCP | https://github.com/ardith666/uiux-methodology |
 | `diagram-design` | 39 tipe diagram editorial, output HTML+SVG self-contained, bisa redraw Mermaid/draw.io | https://github.com/ardith666/diagram-design |
 | `security-meth` | Audit keamanan source-first 6 fase (recon → coverage hunting → validasi → output terstruktur → verifikasi independen → report), fork cloudflare/security-audit-skill (MIT) | https://github.com/ardith666/security-meth |
-| `penelitian-iticm` | Penulisan artikel jurnal bertahap (Tahap 0–13): kunci jurnal, sitasi APA/IEEE, IMRaD, PRISMA untuk SLR, QC + paket submit | https://github.com/ardith666/skills (tree: `penelitian-iticm/`) |
+| `penelitian-iticm` | Penulisan artikel jurnal bertahap (Tahap 0–13): kunci jurnal, sitasi APA/IEEE, IMRaD, PRISMA untuk SLR, QC + paket submit | https://github.com/ardith666/penelitian-iticm |
 
 ## Bootstrap Otomatis (setup.sh)
 
@@ -43,6 +43,7 @@ git clone https://github.com/ardith666/uiux-methodology     "$SKILLS_DIR/uiux-me
 git clone https://github.com/ardith666/obsidian-notes       "$SKILLS_DIR/obsidian-notes"
 git clone https://github.com/ardith666/diagram-design      "$SKILLS_DIR/diagram-design"
 git clone https://github.com/ardith666/security-meth        "$SKILLS_DIR/security-meth"
+git clone https://github.com/ardith666/penelitian-iticm     "$SKILLS_DIR/penelitian-iticm"
 ```
 
 Lihat `SKILL.md` di masing-masing skill untuk `REQUIRED BACKGROUND` / dependensi
@@ -68,7 +69,7 @@ security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat 
 Untuk menyegarkan copy di repo ini:
 
 ```bash
-for s in mk-iticm pptx-iticm slidev-iticm dev-methodology uiux-methodology obsidian-notes security-meth; do
+for s in mk-iticm pptx-iticm slidev-iticm dev-methodology uiux-methodology obsidian-notes security-meth penelitian-iticm; do
   rsync -a --exclude '.git' --exclude '__pycache__' --exclude '*.pyc' --exclude '.env' \
     "${HOME}/.agents/skills/$s/" "skills/$s/"
 done
@@ -96,6 +97,7 @@ upstream cathrynlavery/diagram-design) via `./sync.sh` — bukan dari `~/.agents
 | **Desain UI/UX** | `uiux-methodology` | Design system, brand identity, palet, font pairing, UX guidelines, 21st.dev |
 | **Catatan/knowledge base (Obsidian)** | `obsidian-notes` | Frontmatter wajib, wikilink, INDEX.md, LOG.md — konsisten antar agent |
 | **Security audit / review keamanan** | `security-meth` (+ `dev-methodology` Phase 2/5 hook) | Source-first 6 fase: recon → coverage hunting → validasi adversarial → findings.json + REPORT.md. Pentest aktif terpisah: `penetration-testing-with-strix` |
+| **Artikel jurnal akademik** | `penelitian-iticm` | Tahap 0–13 step-by-step: kunci jurnal → isi per bab → PRISMA (SLR) → QC + cover letter + cek plagiarisme |
 
 > **RPS kampus = jalur lengkap:** `mk-iticm` memanggil `pptx-iticm`, `dev-methodology`, dan `obsidian-notes` di dalam alurnya — cek `SKILL.md` masing-masing utk dependency.
 > **Diagram:** `diagram-design` = snapshot flat di repo ini (folder `diagram-design/`),
