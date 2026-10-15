@@ -16,6 +16,7 @@ otoritatif (`ardith666/<nama>`).
 | `uiux-methodology` | Intelijen desain UI/UX: design system, brand identity, palet, font pairing, 99+ UX guidelines, 21st.dev MCP | https://github.com/ardith666/uiux-methodology |
 | `diagram-design` | 39 tipe diagram editorial, output HTML+SVG self-contained, bisa redraw Mermaid/draw.io | https://github.com/ardith666/diagram-design |
 | `security-meth` | Audit keamanan source-first 6 fase (recon → coverage hunting → validasi → output terstruktur → verifikasi independen → report), fork cloudflare/security-audit-skill (MIT) | https://github.com/ardith666/security-meth |
+| `penelitian-iticm` | Penulisan artikel jurnal bertahap (Tahap 0–13): kunci jurnal, sitasi APA/IEEE, IMRaD, PRISMA untuk SLR, QC + paket submit | https://github.com/ardith666/skills (tree: `penelitian-iticm/`) |
 
 ## Bootstrap Otomatis (setup.sh)
 
