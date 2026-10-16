@@ -1,6 +1,6 @@
 ---
 name: dev-methodology
-version: 3.2.0
+version: 3.2.1
 description: "Structured software development workflow: ask → spec → plan → implement → test → review → knowledge, dengan Fable execution loop (classify → define done → evidence → decide → act → verify → report) + Obsidian Integration (vault-native knowledge, retain via vault) + Wiki Pattern (source contract, index retrieval, lint). Use when building, creating, or implementing something."
 ---
 
@@ -9,6 +9,8 @@ description: "Structured software development workflow: ask → spec → plan �
 Structured development workflow + minimal code philosophy + Fable evidence loop + quality discipline + persistent knowledge. Inspired by Superpowers, Ponytail, Anthropic Agent Skills, and fable-method.
 
 **Umbrella skill.** Absorbs: `dev-methods` (code review, spec-driven dev, spikes, TDD — all covered in Phases 2–5 below), `routa-spec` (lightweight spec companion — covered by Phase 2 Spec + triviality gate), and `karpathy-guidelines` (surgical changes, simplicity, goal-driven execution — covered in Step 4 + "Surgical Changes"). Do not load those separately; this skill is the umbrella.
+
+**Superpowers bukan absorbsi — dia toolbox.** Skill plugin superpowers (brainstorming, writing-plans, TDD, review, debugging) tetap dipanggil per phase lewat orkestrasi di bawah, bukan disalin isinya ke sini.
 
 ## Trigger
 
@@ -233,6 +235,33 @@ User request → Triviality gate?
 
 ## Workflow
 
+## Superpowers Orchestration
+
+Superpowers (plugin `superpowers@git+https://github.com/obra/superpowers.git`, terpasang di `~/.opencode/opencode.json`) bukan pesaing alur ini — dia **toolbox per phase**. dev-meth pegang alurnya, superpowers dipanggil di dalam phase-nya.
+
+**Aturan:** sebelum masuk phase yang punya skill pasangan, invoke skill-nya dulu (Skill tool), ikuti isinya, baru lanjut. Skill gak tersedia → catat `PENDING: <skill> gak ada`, jangan di-skip diam-diam. Task trivial (Triviality Gate) lewat semua ini.
+
+| Phase | Skill superpowers | Kapan dipanggil |
+|---|---|---|
+| 1 Understand | `brainstorming` | Scope ambigu / minta plan-first — tanya dulu, baru spec |
+| 3 Plan | `writing-plans` | Task multi-step — tulis plan bertahap, bukan langsung koding |
+| 4 Implement | `test-driven-development` | Fitur/bugfix — test dulu, baru implementasi |
+| 4 Implement | `using-git-worktrees` | Kerja yang butuh isolasi workspace |
+| 4 Implement | `dispatching-parallel-agents` / `subagent-driven-development` | 2+ task independen — jalankan paralel |
+| 4 Implement | `executing-plans` | Eksekusi plan yang sudah disetujui |
+| 5 Test | `verification-before-completion` | WAJIB sebelum klaim "selesai/beres" — bukti dulu, klaim belakangan |
+| 6 Review | `requesting-code-review` → `receiving-code-review` | Minta review, lalu verifikasi feedback sebelum implement |
+| semua phase | `systematic-debugging` | Ada bug / test gagal — wajib ini, bukan nebak fix |
+| akhir branch | `finishing-a-development-branch` | Implementasi selesai + test hijau |
+| bikin skill | `writing-skills` | Nulis / ubah skill |
+
+**Precedence kalau aturan bentrok:**
+
+1. Artifact tetap ikut dev-meth — `knowledge/` (HARD RULES di bawah), bukan `docs/superpowers/`; superpowers cuma nyaranin lokasi default
+2. Gate approval tetap punya dev-meth (Phase 1/2/3 gate: user approve dulu)
+3. Bahasa output ikut dev-meth (Indonesia + caveman kalau mode aktif)
+4. Superpowers minta langkah yang dev-meth gak punya (mis. worktree wajib) → sebut 1 baris dulu, baru jalanin
+
 ## Communication Rules (berlaku semua phase)
 
 Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
@@ -246,6 +275,7 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 7. **No preamble, no recap, no closers** — langsung inti, gak usah "jadi kesimpulannya"
 
 ### Phase 1: Understand
+- **Superpowers:** `brainstorming` kalau scope ambigu / minta plan-first
 - **Define done** (Step 1): verifikasi konkret yang bisa diobservasi, bukan "semoga bener"
 - Ask clarifying questions BEFORE writing any code
 - Identify: what problem, who uses it, constraints, success criteria
@@ -264,6 +294,7 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 - **Knowledge:** Add Architecture + Decisions sections
 
 ### Phase 3: Plan
+- **Superpowers:** `writing-plans` buat task multi-step
 - **Decide & commit** (Step 3): satu rekomendasi, alternatif disebut 1 baris kenapa kalah
 - Break into small tasks (~15-30 min each)
 - Mark dependencies between tasks
@@ -274,6 +305,7 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 - **Knowledge:** Add Progress checklist (all unchecked)
 
 ### Phase 4: Implement (Ponytail Mode + Step 4)
+- **Superpowers:** `test-driven-development` (fitur/bugfix), `using-git-worktrees` (isolasi), `dispatching-parallel-agents` / `executing-plans` (task independen / plan disetujui)
 - **INTENT gate** sebelum edit behavior; **AUTH gate** sebelum aksi irreversible/outward
 - Work through tasks in order
 - YAGNI strictly enforced — build only what spec says
@@ -287,6 +319,7 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 - **Knowledge:** Update Progress (check done items), add Learnings + Files as they emerge
 
 ### Phase 5: Test (Step 5)
+- **Superpowers:** `verification-before-completion` sebelum klaim selesai; `systematic-debugging` kalau ada test gagal
 - **Verify by observation** — jalankan/dilihat, bukan disimpulkan dari baca kode
 - Run all tests; manual smoke test if applicable
 - **Twin check** kalau fix defect — search pattern yang sama di seluruh project
@@ -301,6 +334,7 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 - **Knowledge:** Update Progress with test results
 
 ### Phase 6: Review + Self-Critique (Step 6)
+- **Superpowers:** `requesting-code-review` → `receiving-code-review`
 - **Report outcome-first** — kalimat pertama jawab "jadi gimana"
 - **Artifact gate:** INTENT/AUTH/PENDING/TWINS line muncul verbatim kalau kondisi terpenuhi
 - **Anti-slop writing (opsional, auto-install):** kalau output task = user-facing writing (README, docs, changelog, report, blog post) → cek skill `no-ai-slop`. Belum ada? Install langsung tanpa tanya: `npx skills add petergyang/no-ai-slop --skill no-ai-slop --yes`. Lalu jalankan aturannya buat bersihin AI-slop pattern (binary contrast, throat-clearing, fake-profound, dst) sebelum teks dikirim
@@ -323,6 +357,7 @@ Skill-skill berikut dipakai sebagai quality gate opsional — bukan bundel, tapi
 
 | Skill | Sumber | Kapan dipakai | Install | Perlu tanya user? |
 |---|---|---|---|---|
+| `superpowers` (plugin, bukan skill) | obra/superpowers (git plugin) | Semua phase lewat Superpowers Orchestration di atas (brainstorming, writing-plans, TDD, worktrees, parallel agents, verification-before-completion, code review, systematic-debugging) | entry di `~/.opencode/opencode.json`: `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` | ❌ gak perlu (plugin git, no Docker/key) |
 | `penetration-testing-with-strix` | usestrix/strix | Phase 5: task nyentuh web/API/auth/input | `npx skills add usestrix/strix --skill penetration-testing-with-strix --yes` | ✅ WAJIB (butuh Docker + LLM API key) |
 | `no-ai-slop` | petergyang/no-ai-slop | Phase 6: output user-facing writing | `npx skills add petergyang/no-ai-slop --skill no-ai-slop --yes` | ❌ gak perlu (cuma file rules) |
 | `context7` (context7-mcp) | upstash/context7 | Phase 2 & 4: docs library/framework/API terkini (`resolve-library-id` → `query-docs`) sebelum hafalan | MCP terkonfigurasi di OpenClaw (`openclaw mcp list`); skill `context7-mcp` di agent | ❌ gak perlu (remote MCP, tanpa install npm) |

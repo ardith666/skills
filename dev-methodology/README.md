@@ -175,8 +175,9 @@ Modul `references/obsidian/*` = cara skill ini terhubung ke vault Obsidian: **me
 
 ## Version
 
-Current: **v3.1.1** (lihat `VERSION` + tag repo)
+Current: **v3.2.1** (lihat `VERSION` + tag repo)
 
+- v3.2.1 — **Superpowers Orchestration**: tabel mapping phase → skill superpowers (brainstorming, writing-plans, TDD, worktrees, parallel agents, verification-before-completion, code review, systematic-debugging, finishing-a-development-branch, writing-skills) + aturan precedence (artifact tetap ke `knowledge/`, gate approval tetap dev-meth, bahasa output ikut dev-meth) + hook 1 baris di Phase 1/3/4/5/6. Plugin superpowers tetap terpasang, isinya tidak disalin
 - v3.1.1 — **Graphify gitignore rule**: panduan commit-vs-ignore `graphify-out/` (commit graph.json/html/GRAPH_REPORT/manifest/cost/labels; ignore `cache/`, `.graphify_python`, `.graphify_root`); blok gitignore utk terapkan di repo project
 - v3.1.0 — **Graphify Integration** (modul baru `references/graphify/`): knowledge graph codebase (extract/query/path/explain, offline `--code-only`), query-first di Phase 1/2/4/6; aturan hasil → `knowledge/`; cara instalasi & deploy per mesin + prompt AUTH ke user
 - v3.0.1 — **Vault Hygiene** (`references/obsidian/README.md`): graph check `unresolved`/`orphans` + 7 aturan dari audit nyata; hook Phase 6 verifikasi health graph
@@ -196,6 +197,7 @@ Quality gate opsional — bukan bundel, referensi. Install di agent (bukan di re
 
 | Skill | Sumber | Kapan dipakai | Install | Perlu tanya user? |
 |---|---|---|---|---|
+| `superpowers` (plugin, bukan skill) | obra/superpowers (git plugin) | Semua phase lewat Superpowers Orchestration (brainstorming, writing-plans, TDD, worktrees, parallel agents, verification-before-completion, code review, systematic-debugging) | entry di `~/.opencode/opencode.json`: `"plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]` | ❌ gak perlu (plugin git, no Docker/key) |
 | `penetration-testing-with-strix` | usestrix/strix | Phase 5: task nyentuh web/API/auth/input | `npx skills add usestrix/strix --skill penetration-testing-with-strix --yes` | ✅ WAJIB (butuh Docker + LLM API key) |
 | `no-ai-slop` | petergyang/no-ai-slop | Phase 6: output user-facing writing | `npx skills add petergyang/no-ai-slop --skill no-ai-slop --yes` | ❌ gak perlu (cuma file rules) |
 

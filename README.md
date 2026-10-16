@@ -58,6 +58,13 @@ mk-iticm (entry point, orkestrasi 5 phase)
 ├── butuh pptx-iticm ATAU slidev-iticm → produksi deck (Phase 3, tanya dulu: slidev-html rich vs pptx)
 └── butuh dispatching-parallel-agents (superpowers) → fan-out 4 workstream
 
+dev-methodology (mandiri) — plugin superpowers = toolbox per phase
+├── Phase 1 → brainstorming        ├── Phase 4 → TDD, worktrees, parallel agents
+├── Phase 3 → writing-plans        ├── Phase 5 → verification-before-completion
+└── Phase 6 → requesting/receiving-code-review; semua phase → systematic-debugging
+   install: ~/.opencode/opencode.json → "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]
+   (aturan lengkap + precedence: dev-methodology/SKILL.md § Superpowers Orchestration)
+
 pptx-iticm (mandiri, bisa dipakai tanpa mk-iticm untuk edit/generate deck)
 slidev-iticm (mandiri, deck HTML rich; isi/konsep mirip pptx-iticm, lebih rich interaktif)
 uiux-methodology (independen)
