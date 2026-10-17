@@ -1,6 +1,6 @@
 ---
 name: dev-methodology
-version: 3.2.1
+version: 3.2.2
 description: "Structured software development workflow: ask → spec → plan → implement → test → review → knowledge, dengan Fable execution loop (classify → define done → evidence → decide → act → verify → report) + Obsidian Integration (vault-native knowledge, retain via vault) + Wiki Pattern (source contract, index retrieval, lint). Use when building, creating, or implementing something."
 ---
 
@@ -115,7 +115,7 @@ Namain scope: file/surface yang bakal disentuh. Butuh sesuatu di luar scope mid-
 
 Verifikasi dua hal, plus satu lagi kalau fix defect:
 - **(a)** Kriteria done (Step 1) pass — DIJALANKAN/dilihat (run, render, count), bukan disimpulkan dari baca kode;
-- **(b)** Sistem sekitar tetap jalan: existing tests/build/lint area yang disentuh. Check targeted hijau tapi build broken = verifikasi GAGAL;
+- **(b)** Sistem sekitar tetap jalan: existing tests/build/lint area yang disentuh. Check targeted hijau tapi build broken = verifikasi GAGAL. **Gate selesai = perintah check kanonik project itu sendiri** (yang tertulis di README/package.json/Makefile/CI) dijalankan sampai hijau — bukan check ad-hoc karangan sendiri, dan bukan klaim tanpa dijalankan;
 - **(c) Twin check** kalau fix defect: bug di satu tempat diasumsikan kambuh di tempat lain sampai dicari. Namain exact wrong construct, search seluruh project, tulis verbatim di report: `TWINS: searched <pattern> - found <N> other sites: <files, or "none">`. Fix atau list.
 
 Gagal → mekanis (salah di perubahan) balik Step 4; surprise (kontradiksi pemahaman) balik Step 2. **Hard bound:** 3 siklus fix-verify gagal di isu yang sama, atau keblokir hal di luar kontrol (credential, environment, permission) → STOP. Lapor yang udah dicoba, output asli, hipotesis sekarang, hand back ke user.
@@ -321,6 +321,7 @@ Gaya komunikasi ADHD-friendly — action first, tanpa basa-basi:
 ### Phase 5: Test (Step 5)
 - **Superpowers:** `verification-before-completion` sebelum klaim selesai; `systematic-debugging` kalau ada test gagal
 - **Verify by observation** — jalankan/dilihat, bukan disimpulkan dari baca kode
+- **Gate selesai = check kanonik project** — perintah test/lint/build yang tertulis di project (README/package.json/Makefile/CI) dijalankan sampai hijau; check ad-hoc karangan sendiri atau klaim tanpa dijalankan bukan bukti
 - Run all tests; manual smoke test if applicable
 - **Twin check** kalau fix defect — search pattern yang sama di seluruh project
 - **Security scan (opsional — WAJIB tanya user dulu):** kalau task nyentuh web/API/auth/input handling, tawarkan audit. Dua jalur komplementer:

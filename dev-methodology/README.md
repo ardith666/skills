@@ -175,8 +175,9 @@ Modul `references/obsidian/*` = cara skill ini terhubung ke vault Obsidian: **me
 
 ## Version
 
-Current: **v3.2.1** (lihat `VERSION` + tag repo)
+Current: **v3.2.2** (lihat `VERSION` + tag repo)
 
+- v3.2.2 — **Completion gate**: gate selesai = perintah check kanonik project (yang tertulis di README/package.json/Makefile/CI) dijalankan sampai hijau; check ad-hoc karangan sendiri atau klaim tanpa dijalankan bukan bukti. Titik pasang: Step 5(b) + hook Phase 5
 - v3.2.1 — **Superpowers Orchestration**: tabel mapping phase → skill superpowers (brainstorming, writing-plans, TDD, worktrees, parallel agents, verification-before-completion, code review, systematic-debugging, finishing-a-development-branch, writing-skills) + aturan precedence (artifact tetap ke `knowledge/`, gate approval tetap dev-meth, bahasa output ikut dev-meth) + hook 1 baris di Phase 1/3/4/5/6. Plugin superpowers tetap terpasang, isinya tidak disalin
 - v3.1.1 — **Graphify gitignore rule**: panduan commit-vs-ignore `graphify-out/` (commit graph.json/html/GRAPH_REPORT/manifest/cost/labels; ignore `cache/`, `.graphify_python`, `.graphify_root`); blok gitignore utk terapkan di repo project
 - v3.1.0 — **Graphify Integration** (modul baru `references/graphify/`): knowledge graph codebase (extract/query/path/explain, offline `--code-only`), query-first di Phase 1/2/4/6; aturan hasil → `knowledge/`; cara instalasi & deploy per mesin + prompt AUTH ke user
