@@ -56,7 +56,65 @@ penelitian-iticm (Orchestrator Tahap 0–13)
 
 ---
 
-## Alur Kerja (Sequence Diagram)
+## Alur Kerja (Flowchart & Sequence)
+
+### 1. Diagram Alur Kerja Utama (Flowchart)
+
+Diagram alir blok vertikal yang mudah dibaca per fase:
+
+```mermaid
+flowchart TD
+    classDef startEnd fill:#1e293b,stroke:#0f172a,color:#fff,stroke-width:2px;
+    classDef phase1 fill:#e0f2fe,stroke:#0284c7,color:#0369a1,stroke-width:2px;
+    classDef phase2 fill:#fef3c7,stroke:#d97706,color:#92400e,stroke-width:2px;
+    classDef phase3 fill:#dbeafe,stroke:#2563eb,color:#1e40af,stroke-width:2px;
+    classDef phase4 fill:#ede9fe,stroke:#7c3aed,color:#5b21b6,stroke-width:2px;
+    classDef phase5 fill:#dcfce7,stroke:#16a34a,color:#15803d,stroke-width:2px;
+
+    Start([Mulai Proyek Riset]):::startEnd --> InitKB[Inisialisasi knowledge/<br/>ROADMAP.md & HISTORY.md]
+
+    subgraph FASE1 ["Fase 1: Fondasi Riset (Tahap 00–03)"]
+        InitKB --> T00[Tahap 00: Kunci Jurnal & Template]
+        T00 --> T01[Tahap 01: Aturan Sitasi APA/IEEE]
+        T01 --> T02[Tahap 02: 13 Parameter Desain & Data]
+        T02 --> T03[Tahap 03: Kunci Outline IMRaD]
+    end
+    class T00,T01,T02,T03 phase1;
+
+    subgraph FASE2 ["Fase 2: Penulisan Draf Indonesia (Tahap 04–11)"]
+        T03 --> WriteDraft[Penyusunan Per Bab:<br/>Pendahuluan, Tinjauan, Metode,<br/>Hasil, Pembahasan, Kesimpulan]
+        WriteDraft --> GateNaskahID{"Gate Wajib:<br/>naskah-id<br/>(EYD V & KBBI)"}
+        GateNaskahID -- "Perlu Perbaikan" --> WriteDraft
+        GateNaskahID -- "Lolos" --> T10[Tahap 10: Verifikasi Sitasi & Zotero]
+        T10 --> T11[Tahap 11: Abstrak Indonesia 150-250 Kata]
+    end
+    class WriteDraft,GateNaskahID,T10,T11 phase2;
+
+    subgraph FASE3 ["Fase 3: Alih Bahasa (Tahap 12)"]
+        T11 --> TargetLang{"Target Bahasa<br/>Jurnal?"}
+        TargetLang -- "Jurnal Bahasa Indonesia" --> SkipTrans[Lewati Tahap 12]
+        TargetLang -- "Jurnal Internasional" --> T12[Tahap 12: Academic English Translation<br/>dari Draf Indonesia yang Lolos naskah-id]
+    end
+    class TargetLang,SkipTrans,T12 phase3;
+
+    subgraph FASE4 ["Fase 4: Humanisasi & Sanitasi Plagiarisme"]
+        SkipTrans --> HumanizerPass[Humanizer Skill Pass<br/>Hilangkan AI Tells & Gaya Kaku]
+        T12 --> HumanizerPass
+        HumanizerPass --> TurnitoutPass[Turnitout-Humanizer<br/>1. Bersihkan Zero-Width Space<br/>2. Strip C2PA Metadata<br/>3. Pecah N-Gram Turnitin/iThenticate]
+    end
+    class HumanizerPass,TurnitoutPass phase4;
+
+    subgraph FASE5 ["Fase 5: Assembly Dokumen & QC Submit (Tahap 13)"]
+        TurnitoutPass --> OfficecliBuild[officecli:<br/>Assembly Teks ke Template .docx Jurnal]
+        OfficecliBuild --> T13[Tahap 13: QC 6 Dimensi, Metadata,<br/>Cover Letter & Checklist Plagiarisme]
+        T13 --> Done([Paket Submit Lengkap & Siap Kirim]):::startEnd
+    end
+    class OfficecliBuild,T13 phase5;
+```
+
+---
+
+### 2. Diagram Interaksi Detail (Sequence Diagram)
 
 ```mermaid
 sequenceDiagram
