@@ -51,6 +51,7 @@ Setiap proyek artikel WAJIB punya folder `<proyek>/knowledge/` sebagai memori be
 - Tense: Pendahuluan present, Metode/Hasil past, Pembahasan campuran; hedging (`suggests/may`) bukan `proves`.
 - Setiap DOI/nama/tahun diverifikasi; yang tak terkonfirmasi ditandai `[PERLU VERIFIKASI MANUAL]`.
 - LLM tidak boleh jadi co-author; cek AI-disclosure jurnal sebelum submit.
-- Humanizer pass: sebelum Tahap 13 (submit), jalankan skill humanizer mode file atas draf final; bila ada sampel tulisan user (`VOICE.md`/naskah sebelumnya di folder proyek), pakai sebagai acuan nada.
+- Humanizer & Turnitout pass: sebelum Tahap 13 (submit), jalankan skill humanizer mode file atas draf final untuk nada alami. Selanjutnya, gunakan [Turnitout-Humanizer](https://github.com/ardith666/Turnitout-Humanizer) (alat zero-AI deterministik) untuk membersihkan token watermark AI, zero-width tracking Unicode, metadata C2PA, dan memecah contiguous n-gram pemicu Turnitin/iThenticate pada berkas .docx/.tex.
+- Dependensi ekosistem: `Turnitout-Humanizer` (sanitasi Turnitin/AI), `naskah-id` (kaidah EYD V / KBBI), `dev-methodology` (state tracking), dan `officecli` (`tools/officecli.md` untuk build format .docx).
 - Dependensi .docx: officecli (instal + konvensi JUTISI di `tools/officecli.md`); dipakai Tahap 13 untuk membangun file .docx naskah.
 - Latar: Tahap 1–6 verbatim Notes ITICM/Penelitian "Aturan Promt"; Tahap 0, 7–13 lanjutan gaya sama. Pelajaran `jamditis/academic-writing`: `references/pelajaran-academic-writing.md`. Verifikasi sumber + IEEE (dari `endigo/academic-research-writer`): `references/verifikasi-sumber.md`, `references/format-ieee.md`.
