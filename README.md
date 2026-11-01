@@ -17,7 +17,7 @@ otoritatif (`ardith666/<nama>`).
 | `uiux-methodology` | Intelijen desain UI/UX: design system, brand identity, palet, font pairing, 99+ UX guidelines, 21st.dev MCP | https://github.com/ardith666/uiux-methodology |
 | `diagram-design` | 39 tipe diagram editorial, output HTML+SVG self-contained, bisa redraw Mermaid/draw.io | https://github.com/ardith666/diagram-design |
 | `security-meth` | Audit keamanan source-first 6 fase (recon → coverage hunting → validasi → output terstruktur → verifikasi independen → report), fork cloudflare/security-audit-skill (MIT) | https://github.com/ardith666/security-meth |
-| `penelitian-iticm` | Penulisan artikel jurnal bertahap (Tahap 0–13): kunci jurnal, sitasi APA/IEEE, IMRaD, PRISMA untuk SLR, QC + paket submit | https://github.com/ardith666/penelitian-iticm |
+| `penelitian-iticm` | Penulisan artikel jurnal bertahap (Tahap 0–13): kunci jurnal, sitasi APA/IEEE, IMRaD, PRISMA untuk SLR, QC + paket submit. Wajib dependensi: `humanizer-indonesia` | https://github.com/ardith666/penelitian-iticm |
 
 ## Bootstrap Otomatis (setup.sh)
 
@@ -70,6 +70,11 @@ dev-methodology (mandiri) — plugin superpowers = toolbox per phase
 pptx-iticm (mandiri, bisa dipakai tanpa mk-iticm untuk edit/generate deck)
 slidev-iticm (generator/auditor deck web interaktif ITICM)
 └── WAJIB humanizer-indonesia     → gaya bahasa alami, anti-AI tells, nol em-dash, register ajar/akademik
+penelitian-iticm (penulisan artikel jurnal SINTA/Scopus Tahap 0–13)
+├── WAJIB humanizer-indonesia     → gaya bahasa akademik alami, anti-AI tells, nol em-dash (Preset akademik)
+├── butuh naskah-id               → gate kaidah EYD V & kata baku KBBI (Tahap 04–11)
+├── butuh Turnitout-Humanizer     → sanitasi watermark AI & n-gram Turnitin (Tahap 12–13)
+└── butuh dev-methodology          → pelacakan state (knowledge/ROADMAP.md)
 uiux-methodology (independen)
 security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat pentest aktif)
 ```

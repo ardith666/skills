@@ -16,31 +16,36 @@ penelitian-iticm (Orchestrator Tahap 0–13)
 ├── [Tahap 00–03] Fondasi & Desain Riset
 │   └── dev-methodology          → Governance & alur eksekusi (spec → plan → test)
 │
-├── [Tahap 04–11] Penyusunan Draft Indonesia Baku (Gate Wajib naskah-id)
+├── [Tahap 04–11] Penyusunan Draft Indonesia Baku (Gate Wajib humanizer-indonesia & naskah-id)
+│   ├── humanizer-indonesia (WAJIB) → Naturalisasi prosa akademik, eliminasi AI tells, nol em-dash, irama kalimat
 │   ├── naskah-id (WAJIB)        → Penjaga kaidah EYD V, KBBI & peristilahan akademik Indonesia
 │   ├── diagram-design           → Diagram alur metodologi / arsitektur penelitian (Tahap 06-07)
 │   └── Zotero / DOI verifier    → Verifikasi sumber primer 5 tahun terakhir (Tahap 10)
 │
 ├── [Tahap 12] Alih Bahasa (Academic English Translation)
-│   └── English Translator       → Menerjemahkan naskah Indonesia yang sudah tervalidasi naskah-id
+│   └── English Translator       → Menerjemahkan naskah Indonesia yang sudah tervalidasi humanizer & naskah-id
 │
 └── [Tahap 12–13] Humanisasi, Sanitasi Jejak AI & Paket Submit
-    ├── humanizer (skill)        → Naturalisasi prosa & eliminasi AI tells / klise
+    ├── humanizer-indonesia      → Audit metrik akhir (scripts/metrik.py --preset akademik)
     ├── Turnitout-Humanizer      → Sanitasi zero-AI token watermark, zero-width space & n-gram Turnitin
     └── officecli                → Assembly dokumen final .docx sesuai template jurnal
 ```
 
 ### Repositori Dependensi
-1. **[naskah-id](https://github.com/ardith666/naskah-id)** *(WAJIB pada Tahap 04–11)*:
+1. **[humanizer-indonesia](https://github.com/ardith666/humanizer-indonesia)** *(WAJIB pada Tahap 04–11 & 13)*:
+   - Standar gaya penulisan manusiawi berbahasa Indonesia untuk register `akademik`.
+   - Mengeliminasi ciri khas AI (*AI tells*): nol tanda em dash (`—`) dan en dash (`–`), nol pola penyangkalan antisipatif (*bukan berarti*, *bukan X melainkan Y*), serta pembersihan nominalisasi berlebih dan verba ringan klise.
+   - Evaluasi metrik kuantitatif terstandar (`scripts/metrik.py --preset akademik`): panjang kalimat rata-rata 16–21 kata, simpangan baku $\ge$ 6.4, dan kalimat panjang ($\ge$ 28 kata) maksimal 20%.
+2. **[naskah-id](https://github.com/ardith666/naskah-id)** *(WAJIB pada Tahap 04–11)*:
    - Menjadi gate bahasa utama untuk seluruh draf awal (Bahasa Indonesia).
    - Memastikan ketatnya kaidah EYD V, kebakuan kata KBBI, struktur kalimat lugas, dan peristilahan ilmiah Indonesia sebelum naskah masuk ke tahap alih bahasa.
-2. **[Turnitout-Humanizer](https://github.com/ardith666/Turnitout-Humanizer)** *(WAJIB pada Tahap 12–13)*:
+3. **[Turnitout-Humanizer](https://github.com/ardith666/Turnitout-Humanizer)** *(WAJIB pada Tahap 12–13)*:
    - Sanitasi jejak AI tanpa LLM generatif (zero-AI rule engine).
    - Pembersihan invisible zero-width Unicode (`U+200B`, `U+200C`, `U+200D`, `U+2060`) dan C2PA metadata.
    - Disrupsi n-gram Turnitin/iThenticate/GPTZero pada berkas `.docx`, `.tex`, dan source code tanpa merusak formula, sitasi, maupun format tabel.
-3. **[dev-methodology](https://github.com/ardith666/dev-methodology)**:
+4. **[dev-methodology](https://github.com/ardith666/dev-methodology)**:
    - Kerangka kerja manajemen state naskah (`knowledge/ROADMAP.md` & `HISTORY.md`).
-4. **[officecli](tools/officecli.md)**:
+5. **[officecli](tools/officecli.md)**:
    - CLI parsing & assembly naskah format Microsoft Word (`.docx`) sesuai template jurnal target.
 
 ---

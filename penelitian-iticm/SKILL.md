@@ -13,6 +13,23 @@ Step-by-step router for a journal-ready Indonesian article (AMP Gen.03, Tahap 0�
 - Field (kualitatif/kuantitatif/mixed) or literature-based (SLR, narrative/integrative review, conceptual paper)
 - NOT for: skripsi/thesis chapters, non-academic copywriting, single-paragraph paraphrase
 
+## REQUIRED BACKGROUND & DEPENDENCIES
+- **`humanizer-indonesia` (MANDATORY DEPENDENCY)**:
+  Wajib diterapkan pada seluruh penulisan dan penyuntingan draf naskah ilmiah Bahasa Indonesia (Tahap 04–11: Pendahuluan, Tinjauan Pustaka, Metode, Hasil, Pembahasan, Kesimpulan, Abstrak) dengan **Preset `akademik`**.
+  * Menjamin naskah mengalir alami tanpa terbaca sebagai tulisan model AI.
+  * Nol em dash (`—`) dan en dash (`–`) di badan naskah.
+  * Nol pola penyangkalan antisipatif (*bukan berarti*, *bukan X melainkan Y*).
+  * Membuang nominalisasi berlebih dan verba ringan klise (*melakukan pengukuran* → *mengukur*, *memberikan dampak* → *berdampak*).
+  * Verifikasi metrik via `metrik.py --preset akademik` sebelum naskah masuk ke Tahap 12 (English) atau Tahap 13 (QC & Submit).
+- **`naskah-id`**:
+  Gate penjaga kaidah EYD V, kebakuan kata KBBI, dan peristilahan akademik Indonesia pada draf awal (Tahap 04–11).
+- **`Turnitout-Humanizer`**:
+  Sanitasi zero-AI deterministik untuk membersihkan watermark token AI, zero-width tracking Unicode (`U+200B`, dsb), metadata C2PA, dan n-gram Turnitin pada berkas `.docx`/`.tex` (Tahap 12–13).
+- **`dev-methodology`**:
+  Manajemen state naskah (`knowledge/ROADMAP.md` & `HISTORY.md`).
+- **`officecli`**:
+  Penyusunan berkas naskah `.docx` sesuai template jurnal target (`tools/officecli.md`).
+
 ## Cara Kerja
 0. Siapkan/baca `<proyek>/knowledge/` dulu (lihat "Workspace knowledge/") — sesi lanjutan mulai dari ROADMAP + HISTORY, bukan dari nol.
 1. Mulai dari Tahap 0. Baca HANYA file tahap aktif di `stages/` — jangan preload sisanya.
@@ -51,8 +68,8 @@ Setiap proyek artikel WAJIB punya folder `<proyek>/knowledge/` sebagai memori be
 - Tense: Pendahuluan present, Metode/Hasil past, Pembahasan campuran; hedging (`suggests/may`) bukan `proves`.
 - Setiap DOI/nama/tahun diverifikasi; yang tak terkonfirmasi ditandai `[PERLU VERIFIKASI MANUAL]`.
 - LLM tidak boleh jadi co-author; cek AI-disclosure jurnal sebelum submit.
-- Draf awal disusun dalam Bahasa Indonesia: Gunakan skill `naskah-id` secara WAJIB pada Tahap 04–11 sebagai gate penjaga kaidah EYD V, kata baku KBBI, dan peristilahan akademik Indonesia sebelum naskah masuk ke Tahap 12 (terjemahan Academic English).
-- Humanizer & Turnitout pass: sebelum Tahap 13 (submit), jalankan skill humanizer mode file atas draf final untuk nada alami. Selanjutnya, gunakan [Turnitout-Humanizer](https://github.com/ardith666/Turnitout-Humanizer) (alat zero-AI deterministik) untuk membersihkan token watermark AI, zero-width tracking Unicode, metadata C2PA, dan memecah contiguous n-gram pemicu Turnitin/iThenticate pada berkas .docx/.tex.
-- Dependensi ekosistem: `naskah-id` (gate wajib naskah Indonesia Tahap 04-11), `Turnitout-Humanizer` (sanitasi Turnitin/AI Tahap 12-13), `dev-methodology` (state tracking), dan `officecli` (`tools/officecli.md` untuk build format .docx).
+- Draf awal disusun dalam Bahasa Indonesia: Gunakan skill `humanizer-indonesia` (Preset `akademik`) bersama `naskah-id` secara WAJIB pada Tahap 04–11 sebagai gate penjaga kaidah bahasa alami anti-AI, EYD V, kata baku KBBI, dan peristilahan akademik Indonesia sebelum naskah masuk ke Tahap 12 (terjemahan Academic English).
+- Humanizer & Turnitout pass: jalankan skill `humanizer-indonesia` (`scripts/metrik.py --preset akademik`) atas draf final untuk nada alami dan nol AI tells. Selanjutnya, gunakan [Turnitout-Humanizer](https://github.com/ardith666/Turnitout-Humanizer) (alat zero-AI deterministik) untuk membersihkan token watermark AI, zero-width tracking Unicode, metadata C2PA, dan memecah contiguous n-gram pemicu Turnitin/iThenticate pada berkas .docx/.tex.
+- Dependensi ekosistem: `humanizer-indonesia` (gaya akademik alami anti-AI Tahap 04-11 & 13), `naskah-id` (gate wajib kaidah EYD/KBBI Tahap 04-11), `Turnitout-Humanizer` (sanitasi Turnitin/AI Tahap 12-13), `dev-methodology` (state tracking), dan `officecli` (`tools/officecli.md` untuk build format .docx).
 - Dependensi .docx: officecli (instal + konvensi JUTISI di `tools/officecli.md`); dipakai Tahap 13 untuk membangun file .docx naskah.
 - Latar: Tahap 1–6 verbatim Notes ITICM/Penelitian "Aturan Promt"; Tahap 0, 7–13 lanjutan gaya sama. Pelajaran `jamditis/academic-writing`: `references/pelajaran-academic-writing.md`. Verifikasi sumber + IEEE (dari `endigo/academic-research-writer`): `references/verifikasi-sumber.md`, `references/format-ieee.md`.
