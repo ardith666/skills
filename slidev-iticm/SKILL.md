@@ -1,23 +1,108 @@
 ---
 name: "slidev-iticm"
-description: "Tambah Alur baku deck baru konsisten P04-P05"
+description: "Generator and auditor of single-file interactive web slides (Slidev) for ITICM courses based on 12 strict Slidev-ITICM rules. Seamlessly integrates humanizer-indonesia as a mandatory dependency for natural, engaging, anti-AI Indonesian narrative."
 ---
 
 # Slidev-ITICM
 
 Hasilkan deck HTML tunggal interaktif ala P04 untuk MK ITICM mana pun.
 
-## Alur baku deck baru
+## REQUIRED BACKGROUND & DEPENDENCY
+- **`humanizer-indonesia` (MANDATORY DEPENDENCY)**:
+  Setiap kali `slidev-iticm` digunakan untuk membuat, menulis ulang, atau mengaudit slide kuliah, aturan dan metrik dari `humanizer-indonesia` **WAJIB otomatis diterapkan secara utuh**. Slide interaktif yang baik tidak hanya benar secara teknis, tetapi harus menggunakan bahasa Indonesia yang mengalir alami, hidup, bebas dari pola kaku AI, dan mudah dipahami oleh mahasiswa awam.
+- **`diagram-design`**:
+  Pedoman perancangan diagram editorial SVG untuk slide Peta Rangkuman arsitektural.
 
-1. Audit caption noref via regex `lihat s`.
-2. Definisi eksplisit di s-basis/s-metode (`X adalah ...`).
-3. Footnote `lihat sX` tiap caption kecuali s0/kuis/drill, target 0 noref.
-4. Kuis self-contained 3 soal tanpa `lihat sX`, tiap jawaban WAJIB di collapse `<details class="flow"><summary>Lihat Jawaban</summary>`, dilarang teks jawaban polos terlihat langsung.
-5. Drill 3 uji kecil sebab-akibat-alasan, habis di kelas.
-6. TM fokus pertemuan + backup verbatim RPS di `<!-- dev backup -->`.
-7. Verify `grep -c '<section'`=N+1, `node --check`, lalu push skill.
-8. Demo praktik kode = satu file PHP mandiri di folder deck (mis. `scheduling.php`), dipanggil dari slide via `<iframe src="…php">` — bukan chart.js raksasa di dalam deck.
-9. Deck yang punya blok kode: Prism.js + tombol Salin (lihat section "## Prism.js + tombol Salin").
+---
+
+## Integrasi Wajib: `slidev-iticm` + `humanizer-indonesia`
+
+Setiap pembuatan atau pembaruan slide wajib menerapkan standar `humanizer-indonesia` (Preset `ajar` / `akademik`):
+
+1. **Nol Em Dash (`—`) dan En Dash (`–`) di Badan Prosa**:
+   * Dilarang keras menggunakan tanda pisah em dash (`—`) di judul, narasi, keypoint, maupun skrip demo.
+   * Ganti dengan tanda koma, titik dua (`:`), tanda kurung, atau pecah menjadi dua kalimat mandiri.
+2. **Nol Pola Penyangkalan Antisipatif**:
+   * Dilarang menggunakan pola klise AI seperti *"bukan berarti bahwa..."*, *"bukan X melainkan Y"*, *"X, bukan berarti Y"*.
+   * Ganti dengan konstruksi lugas: *"X belum tentu Y"*, *"X menyimpan Y"*, dsb.
+3. **Pembersihan Diksi Klise & Nominalisasi Berlebih**:
+   * Ubah verba ringan klise (*melakukan analisis*, *memberikan pengaruh*, *mengalami peningkatan*) menjadi kata kerja aktif (*menganalisis*, *memengaruhi*, *naik*).
+   * Buang frasa kosong klise (*penting untuk diingat bahwa*, *perlu dicatat bahwa*, *merupakan salah satu hal yang krusial*).
+4. **Analogi Nyata untuk Mahasiswa Awam**:
+   * Gunakan analogi yang dekat dengan kehidupan kampus dan prodi ITICM (Informatika, Logistik, Bisnis Digital), misalnya: kamar kos, kantin, antrean kasir UMKM, ojek online, barcode rak gudang, buku tebal dan daftar isi.
+5. **Kotak Intisari Wajib "💡 Apa sih maksudnya?"**:
+   * Di setiap slide konten (`s1` sampai `sN-1`), letakkan kotak intisari berbingkai oranye ITICM di **posisi paling bawah**, persis di atas baris rujukan `<p class="caption">...lihat sX</p>`.
+   * Bahasa di dalam kotak harus sederhana, santai, analogis, dan merangkum konsep utama agar mahasiswa awam langsung paham tanpa bingung.
+6. **Verifikasi Metrik Tulisan**:
+   * Rerata panjang kalimat: 16 sampai 21 kata.
+   * Simpangan baku panjang kalimat: $\ge$ 6.4 (irama bervariasi).
+   * Kalimat panjang ($\ge$ 28 kata): maksimal 20%.
+   * Gunakan `scripts/check_humanizer.py` untuk menguji kepatuhan teks secara otomatis.
+
+---
+
+## Alur baku deck baru (12 Aturan)
+
+1. **Kerangka Deck Tunggal (`index.html`)**
+   * Satu berkas mandiri `index.html`.
+   * Slide `s0` adalah cover pembuka (tidak masuk hitungan nomor slide). Slide isi bernomor `s1` sampai `sN`. Slide `sN` adalah cover penutup.
+   * Mendukung routing URL hash `#/N`, navigasi keyboard, swipe sentuh pada ponsel, progress bar dinamis, tombol fullscreen, dan mode cetak dokumen penuh via URL parameter `?all=1`.
+
+2. **Struktur Narasi 3 Paragraf & Kotak Maksud**
+   * Tiap konten utama terdiri dari paragraf dengan 8-12 kalimat santun formal.
+   * Selalu jelaskan alasan di balik konsep, sertakan 1 contoh nyata, 1 kartu *Keypoint* (maksimal 4 poin ringkas), dan 1 elemen visual.
+   * Format teks: inden 2em, rata kanan-kiri (*justify*).
+   * Tambahkan kotak `<div class="narrow maksud-box">` di ujung bawah slide.
+
+3. **Kunci Angka RPS (Zero Drift)**
+   * Catat angka fakta awal, aturan, turunan, total, iterasi maksimal, dan batasan tugas di kepala deck dan cover.
+   * Angka harus konsisten 100% antara narasi, kartu poin kunci, diagram alur, demo interaktif, dan tabel rujukan.
+
+4. **Glosarium Interaktif + Fitur Jump**
+   * Berkas memuat array tunggal `GLO = [["istilah", "kategori", "definisi"], ...]`.
+   * Mendukung pencarian instan (*substring search*), filter chip kategori, penyorotan teks `<mark>`, paginasi 12 item per halaman.
+   * Klik tombol lompat akan mengarahkan pengguna langsung ke slide target dengan efek visual kuning/oranye *pulse*, didukung widget mengambang di pojok kanan bawah.
+
+5. **Persistensi Status (State Persistence)**
+   * Simpan posisi slide, kata kunci pencarian, filter kategori glosarium, dan modal zoom ke `localStorage` (`pXXstate_v1` disesuaikan per kode pertemuan MK).
+   * Routing hash URL selalu menang atas localStorage saat pertama kali dibuka. Mode `?all=1` otomatis menonaktifkan pemulihan status.
+
+6. **Standar Visual ITICM**
+   * Tema warna resmi: Kartu putih beraksen `#e86c00` dengan latar belakang `#1a1a2e`.
+   * Tabel bergaya *card* putih dengan warna header lembut dan baris belang (*zebra stripe*).
+   * Batas lebar elemen visual maksimal 720px (`narrow`), kecuali tabel komparasi lebar atau *trace matrix* (`wide`).
+   * Pustaka CDN: Tailwind CSS, GSAP, Mermaid.js, dan Chart.js dengan *lazy initialization on-enter*.
+   * Efek animasi transisi halus durasi 0.45s (*fade up* bertingkat), menghormati preferensi aksesibilitas `prefers-reduced-motion`.
+
+7. **Navigasi Bawah & Mobile First**
+   * Panel navigasi bawah: `[⏮ Prev Next ⏭]` (`goTo(0)` dan `goTo(N)`).
+   * Indikator tengah: `iticm.ac.id · Slide X/N` (otomatis disembunyikan di layar ponsel sempit).
+   * Logo kanan (`ml-auto`) berfungsi sebagai tombol buka glosarium dengan *badge* jumlah kata.
+   * Kueri media layar ponsel $\le$ 640px merampingkan header, bilah navigasi, dan padding.
+
+8. **Diagram Mermaid Aman (Target 0 Galat)**
+   * Alur proses memakai `flowchart TD` (orientasi vertikal agar pas di layar ponsel).
+   * Diagram sekuens memakai nama partisipan 1 kata.
+   * Pesan dan label simpul **bebas dari karakter `+`, `?`, `=`** (menggunakan frasa deklaratif dengan penghubung `dan`).
+   * Jangan gunakan anotasi `Note over`.
+
+9. **Keamanan Sintaks JavaScript (JS Lock)**
+   * Dilarang melakukan penggantian teks global yang dapat merusak skrip logika (misal: jangan mengubah `changedTouches` menjadi teks lain).
+   * Validasi integritas kode secara berkala via `node --check`.
+
+10. **Kartu Tugas Resmi RPS**
+    * Salin parameter tugas resmi langsung dari RPS (nama tugas, sifat individu/kelompok, uraian instruksi, tenggat, dan bobot nilai) tanpa menebak atau mengurangi bobot.
+
+11. **Slide Peta Rangkuman Premium (Arsitektural)**
+    * Wajib ada 1 slide rangkuman di akhir deck (`sN-2`) memuat diagram arsitektur utuh dalam format **inline SVG** (berawalan ID `rk-*`, skala fleksibel, max-width 720px).
+    * Dilengkapi tombol modal perbesar *fullscreen* dengan kontrol zoom interaktif (`+`, `−`, `0`), penutup via tombol Esc atau tombol X, serta otomatis tersembunyi saat dicetak (`?all=1`).
+
+12. **Blok Kode Terstandar (Prism.js + Tombol Salin)**
+    * Setiap blok kode dibungkus format `<pre><code class="language-sql">` / `language-php` / `language-markup` / `language-none`.
+    * Memuat 7 berkas komponen Prism.js 1.29.0 dari CDN sebelum tag `<style>`.
+    * Dilengkapi tombol Salin satu klik dengan mekanisme salin otomatis dan fallback kompatibilitas lama.
+
+---
 
 ## Demo praktik PHP via iframe (pola P05 s25)
 
@@ -27,6 +112,8 @@ Hasilkan deck HTML tunggal interaktif ala P04 untuk MK ITICM mana pun.
 4. **Kartu hasil + rangkuman** — tiap kartu algoritma: KPI (ekspansi / penugasan / slot), tabel hasil, jejak pencarian di `<details>`, dan paragraf "kenapa eksplorasinya segitu" (`<p class="kenapa">`); paling bawah satu card rangkuman: tabel perbandingan + grafik + kesimpulan.
 5. **Jebakan performa ruang keadaan** — penugasan berurutan (hanya MK berikutnya yang dipasang slot+ruang) supaya ruang keadaan kecil; `h(n)` di-cache (`static $cache`); string jejak jangan simpan frontier penuh (pakai helper potong 4 simpul + `… +N`) — kalau tidak, BFS OOM dan A* bisa 7 detik; target render < 1s via `php -l` + `php -r '$_GET=[]; include "demo.php";'` tanpa notice.
 6. **Narasi slide vs isi demo** — paragraf di slide harus memuat angka/istilah yang sama persis dengan demo (banyak ekspansi, definisi g/h, constraint) supaya tidak ada klaim yang didemo tidak mendukung.
+
+---
 
 ## Prism.js + tombol Salin (pola P04–P15)
 
@@ -79,56 +166,47 @@ pre:hover .codeBtn,.codeBtn:focus{opacity:1}
 function kodeTeks(pre){var c=pre.querySelector('code');return c?c.textContent:pre.textContent;}
 function salinLama(t,ok){var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.left='-9999px';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');ok();}catch(e){}document.body.removeChild(ta);}
 function salinTeks(t,btn){var ok=function(){btn.textContent='Tersalin';setTimeout(function(){btn.textContent='Salin';},1400);};if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){salinLama(t,ok);});}else{salinLama(t,ok);}}
-document.querySelectorAll('pre').forEach(function(pre){if(!pre.querySelector('code'))return;var b=document.createElement('button');b.className='codeBtn';b.type='button';b.textContent='Salin';b.setAttribute('aria-label','Salin kode');b.onclick=function(e){e.preventDefault();salinTeks(kodeTeks(pre),b);};pre.appendChild(b);});
+function pasangTombolSalin(){document.querySelectorAll('pre').forEach(function(pre){if(pre.querySelector('.codeBtn'))return;if(!pre.querySelector('code'))return;var btn=document.createElement('button');btn.className='codeBtn';btn.type='button';btn.textContent='Salin';btn.setAttribute('aria-label','Salin kode');btn.addEventListener('click',function(e){e.stopPropagation();salinTeks(kodeTeks(pre),btn);});pre.appendChild(btn);});}
 ```
 
-### Jebakan Prism
+Panggil `pasangTombolSalin();` di dalam `sync()` atau setelah DOM siap.
 
-- Tema Prism menimpa `<pre>`: `pre[class*=language-]{padding:1em;margin:.5em 0}` mengalahkan `pre{padding:14px;margin:12px auto}` deck (spesifisitas lebih tinggi) → wajib baris override `pre[class*=language-]{…}` di atas.
-- `pre` wajib `position:relative`, tanpa itu tombol Salin melayang jauh (mengikuti presisi elemen terdekat).
-- Tanpa `<code>` di dalam `<pre>`, tombol tidak muncul — script cari `pre.querySelector('code')`.
-- `file://` tidak punya `navigator.clipboard` → fallback `document.execCommand('copy')` wajib ada.
-- `@media print` sembunyikan tombol; `@media (hover:none)` tombol selalu terlihat (HP).
-- Prism saat runtime menambah class `language-x` juga ke `<pre>` (bukan cuma `<code>`) — jangan hard-code class itu.
-- Blok pseudocode putih (style `background:#fff` + border-kiri orange) + `language-none` → tema Prism bikin teks `#ccc` di atas putih = tidak terbaca. Wajib baris `pre code[class*=language-]{color:inherit}` (spesifisitas `0,1,2` > `code[class*=language-]` `0,1,1`).
-- Deck tanpa blok kode apa pun (cek `grep -c '<code class="language-' index.html` = 0) tidak perlu CDN Prism sama sekali — P01–P03 + P16 di Basis Data, P04 + P08 di Algoritma.
+---
 
-## Langkah
+## Kamus Ganti Kata Tak Baku $\rightarrow$ Formal
 
-1. **Bangun kerangka deck tunggal** — satu `index.html`, section `s0` cover + `s1-sN` isi (bagian isi diberi nomor 1..N), hash `#/N`, keyboard panah, progress bar, fullscreen, `?all=1` untuk cetak, tanpa swipe. Slide terakhir `sN` selalu Terima Kasih gaya cover mirror `s0` (`div.wide.cover`, logo, H1 Terima Kasih, chips bawa pulang, tombol Kembali/Ulangi), bukan narrow. Cover `s0` tanpa caption keterangan hitungan halaman: jangan tulis teks "Halaman judul tidak dihitung" atau "Isi dimulai halaman 1". Kerangka (CSS, nav bawah, `gloModal`, `jumpWidget`, satu blok `<script>` inline) identik antar MK: salin `index.html` MK sebelumnya lalu tukar konten, `N`, `GLO`, dan storage key — jangan tulis ulang kerangka. Deck utuh hanya kalau `grep -c '<section'` = N+1 DAN `<nav>`, `gloModal`, `jumpWidget`, serta blok `<script>` ada. Selesai saat pindah slide tanpa reload dan hash sinkron.
-2. **Paparan ringkas, bukan buku** — 1 narasi pendek 1-2 kalimat + 1 kartu Inti max 3-5 butir (5-7 kata per butir) + 1 visual (mermaid ERD/tabel atau blok SQL atau blok `<pre>` pseudocode). Jangan 3 paragraf panjang 8-12 kalimat. Ikuti draft pptx saja, tanpa improvisasi luar draft. Judul cover lock sesuai plan, jangan ubah. Definisi eksplisit wajib: slide basis bedakan basis vs representasi dalam 1 kalimat (`basis adalah catatannya, representasi adalah cara tulisnya agar mesin bisa pakai`); slide metode awali dengan `X adalah ...` sebelum langkah (misal `forward chaining adalah cara menalar dari fakta ke kesimpulan, bottom-up`). Topik pseudocode: tiap slide contoh wajib blok `<pre>` `PROGRAM/DEKLARASI/ISI` keyword Indonesia `BACA TULIS JIKA SELAMA UNTUK AKHIR`, escape `&lt; &gt;`, style putih border-kiri orange; padanan Inggris hanya di caption. Selesai saat tiap slide 1 ide, bahasa formal tanpa kata takbaku (muter/boros/hang/sunyi/gampang/bikin/ngubek/bolong), dan tiap slide contoh memuat `PROGRAM`.
-3. **Kunci angka domain** — catat total aturan, fakta awal, turunan, total, putaran fixed, kembar, maxIter, bug, batas TM dari RPS di kepala deck + cover stats. Selesai saat angka konsisten di narasi, keypoint, glosarium, chart.
-4. **Pasang glosarium inline + jump** — satu file, array `GLO [istilah,kat,definisi]`, search substring, chips kategori, highlight `<mark>`, paginasi 12, klik kartu lompat ke slide + highlight kuning pulse orange, widget fixed kanan-bawah persisten sampai x. Grid `#gloGrid` selalu `grid grid-cols-2 gap-2` (HP dan desktop sama, hemat scroll). Mobile popup tetap popup kanan-kiri: `@media(max-width:640px){#gloModal.open{padding:12px}#gloPanel{max-height:88vh;border-radius:14px;height:auto;width:calc(100% - 24px)}#gloGrid{gap:6px}.gloCard{padding:6px 8px;font-size:12px}.gloCard .text-sm{font-size:12px}.gloCard .text-xs{font-size:11px}}`, jangan full-height/radius-0/padding-0. Jump highlight anti-race: `goTo` async + `await sync()`, `jumpGo` delay 80ms sebelum `scrollIntoView(center)`, CSS `.slide p,.slide h2,.slide li,.slide .card{scroll-margin-top:70px;scroll-margin-bottom:80px}`, mobile `.jumpHi{outline:4px;background:#ffe8c7;pulse 2s}`. Widget mobile ramping kanan: `@media(max-width:640px){#jumpWidget{left:auto;right:12px;width:240px;max-width:70vw;bottom:64px;border-radius:10px}...font 11-12px}`. Selesai saat klik istilah pindah slide benar, highlight center terlihat di HP, dan widget tidak menutup konten.
-5. **Persist state** — simpan `cur+q/kat/page+jump+modal` ke localStorage `p04state_v1` (ganti nama per MK), hash menang atas storage, `?all=1` skip restore. Selesai saat reload kembali ke posisi semula.
-6. **Visual aman + teks paragraf** — kartu putih aksen orange `#e86c00` bg `#1a1a2e`, tabel jadi card putih header tint stripe, visual bawah center max 720 caption siswa, dev `<!-- -->`, split wide hanya tabel/graf/trace, layout safe-center, stack pin Tailwind CDN + GSAP + Mermaid + Chart.js lazy on-enter fallback `<pre>`, animasi `.45s` stagger fadeUp hover lift hormat `prefers-reduced-motion`. Narasi `p.mt-3` wajib paragraf: `justify + indent 2em + hyphens auto`; center hanya `h2`, `.caption`, cover `s0` + penutup `sN` (`#s0 p/div, #sN p/div center`), dan wadah visual (`.tblWrap/.mermaid` center); teks wadah `.kp/.card/details` wajib kiri: `.kp{text-align:left}`, `.card{text-align:left}` + `.card p{text-align:left;text-indent:0}` + `details.card summary{text-align:left}`, lock `#s30 .kp/.card/details/summary left` agar tak ketarik `#s30 center`; kode dan daftar tetap kiri: `.slide pre{text-align:left}`, `.slide ul,.slide ol{text-align:left;display:inline-block}` agar struktur `PROGRAM` dan butir tidak rusak. Selesai saat tidak ada tabel transparan, narasi justify berindent, kp/card/kuis kiri, head/cover/visual center sedang pre/ul kiri.
-7. **Caption per slide + footnote rujuk** — teks kecil bawah tiap visuals pakai `<p class="caption">`, isi keterangan visual + `lihat sX` ke definisi/trace/kode (misal `R4 lihat s15, R10 lihat s16`, `fixed point lihat s10`). Nol caption tanpa rujuk kecuali cover s0; audit via regex `lihat s`. Kuis tutup catatan + drill lab wajib self-contained jawab langsung tanpa `lihat sX`. Wajib center: `.slide p.caption{text-align:center;text-indent:0}` dan `.slide .narrow>.caption{text-indent:0}`. Selesai saat caption center penuh, tidak kena inden 2em, dan 0 noref di luar kuis/drill.
-8. **Nav + mobile tanpa swipe** — bottom `[⏮ Prev Next ⏭]` (`goTo(0)`/`goTo(N)`) + keyboard panah saja, dilarang swipe/touchstart/touchend agar zoom/scroll mobile bebas. Tengah `iticm.ac.id • Slide X/N` desktop hide HP, logo kanan `ml-auto` jadi tombol glosarium + badge, `@media 640px` rampingkan header/nav/bar logo `h-6`, kanan `mr-10px`. Selesai saat HP 4 tombol muat logo tidak nempel edge dan tidak ada handler sentuh.
-9. **Mermaid aman 19 pola + diagram DB** — flowchart TD vertical-first HP, sequence nama partisipan 1 kata, pesan tanpa `+ ? =`, tanpa `Note over`, label pakai `dan`. Untuk topik konversi/normalisasi tambah erDiagram / classDiagram skema tabel + flowchart alur 1NF-3NF + blok `CREATE TABLE` MySQL read-only (contoh baca, 0 eksekusi). Selesai saat 0 error `translate(undefined,NaN)`.
-10. **JS lock** — jangan global-replace teks di dalam `<script>`, validasi `node --check` tiap edit, tanpa handler swipe. Selesai saat navigasi tombol + sync jalan tanpa SyntaxError.
-11. **Kartu TM dari RPS, boleh fokus pertemuan** — default salin teks resmi Tabel RPS (nama/sifat/isi/batas/nilai) tanpa menebak. Bila RPS generik kabur dari fokus pertemuan (misal TM1 Sub-CPMK 2,3 campur logika+representasi), boleh rewrite fokus pertemuan (nama fokus, min 10 IF THEN id/if/then PHP, run sampai fixed point, lampir output) + backup verbatim RPS di `<!-- dev backup ... -->`. Selesai saat dosen bisa audit ke RPS via backup.
-12. **Tombol PDF di header** — satu tombol `PDF` di header sebelah All/Full, `onclick="printPDF()"`. Fungsi `printPDF()`: `await renderAllMermaid()` dulu (lazy diagram wajib render), tambah class `all` sementara ke `body`, `window.print()`, lalu kembalikan class semula via `afterprint` + timeout cadangan. CSS `@media print`: sembunyikan `header,nav,#bar,#gloModal,#jumpWidget`, `body` bg putih, `.slide{display:block!important}` + `page-break-inside:avoid`, `pre,.mermaid,.card,.kp,.tblWrap,.chartWrap` `break-inside:avoid`. Selesai saat klik PDF cetak semua N+1 slide penuh, bukan 1 slide aktif.
-13. **Kuis + drill ringan** — kuis 3 soal self-contained: beda fakta vs aturan, arah metode 1 kalimat, stop kapan 1 kalimat; tiap jawaban WAJIB di dalam collapse `<details class="flow"><summary>Lihat Jawaban</summary>` (dilarang `<p><b>Jawab:</b>` polos), tanpa `lihat sX` di slide kuis. Drill 3 uji kecil habis di kelas, tiap uji tulis sebab-akibat-alasan (tambah fakta=muncul turunan, kosongkan=stop langsung, reverse=total sama). Tanpa hafal nomor aturan, tanpa buka slide lain. Selesai saat 3 menit kuis + 10 menit drill cukup, dan audit `grep -c '<details'` di slide kuis = 3.
-14. **Humanizer ID (blader/humanizer https://github.com/blader/humanizer)** — cek tiap narasi/keypoint/caption: kalimat tuntas subjek-predikat lengkap tanpa gantung; buang tell AI-ID (kontras "tidak hanya...tetapi", pembuka "penting untuk dicatat", "selain itu" beruntun, frasa zaman, penutup template, triad, inflasi, kata mendalam/komprehensif/holistik/optimalisasi/memfasilitasi). Istilah asing asli jangan terjemah (forward chaining, database, primary key tetap Inggris, padanan Indonesia hanya di glosarium/caption). Selesai saat 0 kalimat gantung + 0 istilah aneh.
-15. **Demo praktik PHP via iframe** — ikuti section "## Demo praktik PHP via iframe" di bawah: satu file PHP mandiri + narasi di atas iframe + tombol unduh + grafik di dalam demo. Selesai saat demo jalan mandiri lewat `php -S`, unduh menghasilkan file yang sama, dan slide hanya berisi narasi + iframe + tombol.
-16. **Blok kode: Prism.js + tombol Salin** — deck yang punya blok kode WAJIB pakai Prism.js + tombol Salin, ikuti section "## Prism.js + tombol Salin" di bawah. Markup `<pre><code class="language-sql">` / `language-php` / `language-markup` / `language-none`, 7 baris CDN Prism di head sebelum `<style>`, CSS override + JS tombol salin. Selesai saat `grep -c '<code class="language-' index.html` = jumlah blok kode, tiap `<pre>` punya `<button class="codeBtn">`, dan blok SQL/PHP/HTML benar-benar ter-sorot warna. Suntik massal deck yang sudah jadi: `slidev/_build/prism_patch.py` (idempoten, dek-tolerant, skip deck tanpa blok kode).
+Wajib mengganti kata kolokial berikut ke bentuk formal baku di seluruh teks slide:
 
-## Pitfalls
+| Kata Tak Baku / Kolokial | Pengganti Baku Formal |
+|---|---|
+| muter | berputar |
+| boros | tidak efisien |
+| hang | tidak merespons |
+| sunyi | hening |
+| gampang | mudah |
+| bikin | membuat |
+| ngubek | menelusuri |
+| bolong | belum lengkap |
+| kepagian | berhenti terlalu dini |
+| ngaruh | berpengaruh |
+| ketemu | ditemukan |
+| nyumbang | berkontribusi |
+| wasit | penentu |
+| plus | dan / serta / beserta |
+| sapu bersih | pembersihan menyeluruh |
 
-- Deck separuh bisa terlihat penuh: `index.html` berisi section konten s0–s25 tapi nol `<script>` inline → tak ada nav/glosarium/jump, `goTo` mati dan deck tak bisa dipindah. Isi konten dulu lalu kerangka = setengah deck; jangan tandai selesai sebelum cek N+1 section + `<script>`/nav/gloModal/jumpWidget ada. **Pulihkan dengan cangkok kerangka, jangan tulis ulang.** Ambil dari `</section>` terakhir sampai akhir file pada `index.html` MK lengkap sebelumnya — batas itu memuat nav + `gloModal` + `jumpWidget` + satu `<script>` (CSS kedua deck sudah identik, jadi cangkokan membawa stylenya). Sisipkan sebelum `</body>` deck separuh, lalu tukar `p04state_v1`→`pXXstate_v1`, label `P04`→`PXX`, array `GLO` dan `GLO_CATS`. Buang fungsi chart P04 (`drawCh3/11/24` + `let charts={}`) **hanya bila** deck baru tak punya `<canvas id="ch*">`. Verifikasi: `grep -c '<section'` = N+1, `node --check` pada isi `<script>`, dan DOM key yang dipakai `sync()` (`label`, `prog`, `barFill`, `glo*`, `jw*`) ada.
-- Caption tidak center meski `.caption` sudah `text-align:center` — penyebabnya `.slide p.mt-3` justify lebih spesifik; tetap pertahankan penimpa `.slide p.caption{text-align:center;text-indent:0}`, bukan menambah `!important` acak.
-- Istilah pakai dulu definisi belakangan: wajib footnote `lihat sX` di caption kemunculan, definisi eksplisit di s-basis/s-metode; kuis/drill tetap self-contained.
-- `+` di mermaid picu `<g> translate(undefined,NaN)` — ganti `dan`.
-- `iticm.ac.id` kepotong `itic...` di HP — hide mid, kanan `ml-auto`.
-- Swipe dilarang: jangan tambah `touchstart`/`touchend`; zoom/scroll mobile prioritas, navigasi hanya tombol + keyboard.
-- Glosarium mobile wajib popup kanan-kiri, bukan full: jangan `padding:0` / `height:100%` / `radius:0`; grid selalu 2 kolom padat 12px.
-- Jump highlight mobile: `sync()` `scrollTo(0,0)` vs `scrollIntoView(center)` race — wajib `goTo` async + delay 80ms + `scroll-margin-top:70px`; outline mobile 4px `#ffe8c7` pulse 2s agar terlihat.
-- Widget jump mobile wajib ramping kanan 240px agar tidak menutup highlight: `left:auto;right:12px;width:240px;max-width:70vw`, font 11-12px.
-- Keypoint/bullet terlihat center padahal isi kiri — penyebabnya wadah `.kp{text-align:center}` + `ul{display:inline-block}`; wajib `.kp{text-align:left}`, `.card{text-align:left}` + `.card p{left,indent 0}` + `details.card summary{left}`, lock `#s30` inner kiri; jangan center-kan wadah teks bullet/kuis.
-- Narasi wajib paragraf justify + indent 2em; center hanya h2/caption/cover s0/penutup sN/visual; `pre/ul/ol` tetap kiri agar `PROGRAM` terbaca.
-- `node_modules` di luar www, deny `src/`, CDN load-1 lambat wajar.
-- Slide demo praktik aneh/konten melorot — iframe `</iframe>` tidak ditutup atau narasi/iframe/tombol terpisah `</div>` tak seimbang; wajib tutup iframe dan cek `count('<div')==count('</div>')` per section sebelum selesai.
-- Demo PHP berat (OOM / >5 detik) — ruang keadaan meledak (penugasan semua kombinasi sekaligus), `h(n)` dihitung ulang tiap scan, atau jejak menyimpan frontier penuh; perbaiki: penugasan berurutan, cache `static`, potong string jejak. Grafik perbandingan jangan chart.js terpisah di deck — SVG inline di dalam demo dengan skala log.
-- Demo PHP fatal `TypeError: Argument 1 passed to … must be of the type string, bool given` saat diakses lewat `index.php?r=slide-stream` — controller `include` file di dalam method, jadi variabel top-level bersifat lokal sementara fungsi demo ber-`global` membaca `$GLOBALS` kosong: semua kandidat dianggap tidak valid, `jalur` kosong, `end($jalur)` = `false`. Perbaiki: setelah definisi data, salin `$GLOBALS['matakuliah']/$GLOBALS['ruang']/$GLOBALS['slot']` (atau jangan pakai `global`), dan bungkus `slotAkhir($r)` = `0` bila `jalur` kosong. Uji wajib dengan PHP 8.5 (phpBro: `bin/php/8.5.8/php`, bukan php 7 CLI homebrew): `php -r 'function s($f){ob_start();include $f;return ob_get_clean();} $_GET=[]; echo strlen(s("demo.php"));'`.
-- Graf SVG terpotong di bawah — tinggi `viewBox` dihitung dari jumlah baris per kolom kedalaman, dan penghitung baris salah bila penanda awal `$row[$d]=0` tidak pernah di-increment (node pertama tiap kolom hilang dari hitungan; DFS bisa jadi `viewBox` 20px untuk isi 42px). Pakai `$rIdx = $row[$d] ?? 0; $row[$d] = $rIdx + 1;` dan tinggi `20 + maxRow*34 + (terpotong ? 14 : 4)`. Verifikasi: `viewBox H >= max(rectY + rectH) + 4` untuk tiap SVG.
-- Perubahan demo tak terlihat setelah edit — stream mengirim `Cache-Control: private, max-age=3600`; minta hard refresh (Cmd+Shift+R) sebelum menyimpulkan masih bug.
-- Blok kode tanpa Prism atau tombol Salin — deck tetap "jalan" tapi mahasiswa screenshot layar; atau `<pre>` polos tanpa `<code>` → tombol Salin tidak pernah muncul (script cari `pre.querySelector('code')`); atau tema Prism menimpa `pre` (margin/padding hilang) karena lupa baris override `pre[class*=language-]{…}`.
+---
+
+## Pitfalls yang Sering Terjadi
+
+- **Deck separuh bisa terlihat penuh**: `index.html` berisi section konten s0–s25 tapi nol `<script>` inline → tak ada nav/glosarium/jump, `goTo` mati dan deck tak bisa dipindah. Verifikasi: `grep -c '<section'` = N+1, `node --check` pada isi `<script>`, dan DOM key yang dipakai `sync()` (`label`, `prog`, `barFill`, `glo*`, `jw*`) ada.
+- **Caption tidak center meski `.caption` sudah `text-align:center`**: Penyebabnya `.slide p.mt-3` justify lebih spesifik; tetap pertahankan penimpa `.slide p.caption{text-align:center;text-indent:0}`, bukan menambah `!important` acak.
+- **Istilah pakai dulu definisi belakangan**: Wajib footnote `lihat sX` di caption kemunculan, definisi eksplisit di s-basis/s-metode; kuis/drill tetap self-contained.
+- **`+` di mermaid picu `<g> translate(undefined,NaN)`**: Ganti `dan`.
+- **`iticm.ac.id` kepotong `itic...` di HP**: Hide mid, kanan `ml-auto`.
+- **Swipe dilarang**: Navigasi via tombol `[⏮ Prev Next ⏭]` + keyboard panah.
+- **Keypoint/bullet terlihat center padahal isi kiri**: Wadah `.kp{text-align:left}`, `.card{text-align:left}` + `.card p{left,indent 0}` + `details.card summary{left}`.
+- **Slide demo praktik melorot**: Iframe `</iframe>` tidak ditutup atau narasi/iframe/tombol terpisah `</div>` tak seimbang; wajib tutup iframe dan pastikan tag div seimbang.
+- **Demo PHP berat (OOM / >5 detik)**: Ruang keadaan meledak (penugasan semua kombinasi sekaligus); perbaiki: penugasan berurutan, cache `static`, potong string jejak. Grafik perbandingan berupa SVG inline di dalam demo dengan skala log.
+- **Perubahan demo tak terlihat setelah edit**: Stream mengirim `Cache-Control: private, max-age=3600`; lakukan hard refresh (Cmd+Shift+R).
+- **Blok kode tanpa Prism atau tombol Salin**: Wajib sertakan CDN Prism, bungkus dengan `<code class="language-*">`, dan terapkan CSS override `pre[class*=language-]`.

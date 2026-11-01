@@ -11,7 +11,8 @@ otoritatif (`ardith666/<nama>`).
 | `obsidian-notes` | Aturan menulis note di vault Obsidian (iCloud) — frontmatter wajib, wikilink internal, markdown link eksternal, INDEX.md + LOG.md per folder | https://github.com/ardith666/obsidian-notes |
 | `mk-iticm` | Orkestrator (entry point) — bangun perangkat pembelajaran lengkap dari RPS: slides, kode, jobsheet, bank soal, penugasan, studi kasus, paket LMS (OBE) | https://github.com/ardith666/mk-iticm |
 | `pptx-iticm` | Generator deck PowerPoint branded ITICM (dark navy + orange, OBE, diagram) | https://github.com/ardith666/pptx-iticm |
-| `slidev-iticm` | Aturan utama deck HTML tunggal interaktif ITICM gaya P04 (hash nav, glosarium + jump, mermaid aman, persist) untuk semua MK | https://github.com/ardith666/slidev-iticm |
+| `slidev-iticm` | Generator & auditor deck slide web interaktif ITICM (12 aturan baku + kotak intisari "💡 Apa sih maksudnya?"). Wajib dependensi: `humanizer-indonesia` | https://github.com/ardith666/slidev-iticm |
+| `humanizer-indonesia` | Menghaluskan teks bahasa Indonesia: anti-AI tells, nol em-dash, bebas penyangkalan antisipatif, ritme alami, register ajar & akademik | https://github.com/ardith666/humanizer-indonesia |
 | `dev-methodology` | Workflow pengembangan terstruktur: spesifikasi → plan → implementasi → review → knowledge (Fable loop + Obsidian) | https://github.com/ardith666/dev-methodology |
 | `uiux-methodology` | Intelijen desain UI/UX: design system, brand identity, palet, font pairing, 99+ UX guidelines, 21st.dev MCP | https://github.com/ardith666/uiux-methodology |
 | `diagram-design` | 39 tipe diagram editorial, output HTML+SVG self-contained, bisa redraw Mermaid/draw.io | https://github.com/ardith666/diagram-design |
@@ -37,7 +38,8 @@ Clone reponya (langsung dari repo sumber atau dari sini) ke folder skills agent:
 SKILLS_DIR="${HOME}/.agents/skills"
 git clone https://github.com/ardith666/mk-iticm            "$SKILLS_DIR/mk-iticm"
 git clone https://github.com/ardith666/pptx-iticm           "$SKILLS_DIR/pptx-iticm"
-git clone https://github.com/ardith666/slidev-iticm          "$SKILLS_DIR/slidev-iticm"
+git clone https://github.com/ardith666/slidev-iticm         "$SKILLS_DIR/slidev-iticm"
+git clone https://github.com/ardith666/humanizer-indonesia  "$SKILLS_DIR/humanizer-indonesia"
 git clone https://github.com/ardith666/dev-methodology      "$SKILLS_DIR/dev-methodology"
 git clone https://github.com/ardith666/uiux-methodology     "$SKILLS_DIR/uiux-methodology"
 git clone https://github.com/ardith666/obsidian-notes       "$SKILLS_DIR/obsidian-notes"
@@ -66,7 +68,8 @@ dev-methodology (mandiri) — plugin superpowers = toolbox per phase
    (aturan lengkap + precedence: dev-methodology/SKILL.md § Superpowers Orchestration)
 
 pptx-iticm (mandiri, bisa dipakai tanpa mk-iticm untuk edit/generate deck)
-slidev-iticm (mandiri, deck HTML rich; isi/konsep mirip pptx-iticm, lebih rich interaktif)
+slidev-iticm (generator/auditor deck web interaktif ITICM)
+└── WAJIB humanizer-indonesia     → gaya bahasa alami, anti-AI tells, nol em-dash, register ajar/akademik
 uiux-methodology (independen)
 security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat pentest aktif)
 ```
@@ -76,7 +79,7 @@ security-meth (dipanggil dev-methodology Phase 5 — audit coverage; strix buat 
 Untuk menyegarkan copy di repo ini:
 
 ```bash
-for s in mk-iticm pptx-iticm slidev-iticm dev-methodology uiux-methodology obsidian-notes security-meth penelitian-iticm; do
+for s in mk-iticm pptx-iticm slidev-iticm humanizer-indonesia dev-methodology uiux-methodology obsidian-notes penelitian-iticm; do
   rsync -a --exclude '.git' --exclude '__pycache__' --exclude '*.pyc' --exclude '.env' \
     "${HOME}/.agents/skills/$s/" "skills/$s/"
 done
@@ -100,13 +103,14 @@ upstream cathrynlavery/diagram-design) via `./sync.sh` — bukan dari `~/.agents
 |---|---|---|
 | **Perangkat pembelajaran / RPS kampus (OBE)** | `mk-iticm` (orserkestrasi) + `pptx-iticm` (slide) + `dev-methodology` (knowledge) + `obsidian-notes` (catatan) | Satu paket lengkap: RPS → slides, kode, jobsheet, bank soal, penugasan, studi kasus, paket LMS |
 | **Slide/deck presentasi (branded ITICM)** | `pptx-iticm` ATAU `slidev-iticm` (pilih di Phase 3) | pptx = PowerPoint; slidev-html = HTML tunggal rich (hash nav, glosarium + jump, mermaid, persist), isi/konsep mirip, lebih rich di slidev-html |
+| **Slide presentasi web interaktif (Slidev HTML)** | `slidev-iticm` (+ `humanizer-indonesia`) | Single-file HTML interaktif, 12 aturan baku, Mermaid aman, Prism.js, SVG modal zoom, bahasa alami tanpa tell AI |
+| **Penyuntingan teks / anti-AI bahasa Indonesia** | `humanizer-indonesia` | Menghaluskan draf tulisan agar mengalir alami, membuang nominalisasi berlebih, 0 em-dash, register ajar/akademik |
 | **Coding assistant / workflow dev** | `dev-methodology` (+ `diagram-design` utk diagram) | Spek → plan → implementasi → review → knowledge (Fable loop + checkpointing) |
 | **Desain UI/UX** | `uiux-methodology` | Design system, brand identity, palet, font pairing, UX guidelines, 21st.dev |
 | **Catatan/knowledge base (Obsidian)** | `obsidian-notes` | Frontmatter wajib, wikilink, INDEX.md, LOG.md — konsisten antar agent |
 | **Security audit / review keamanan** | `security-meth` (+ `dev-methodology` Phase 2/5 hook) | Source-first 6 fase: recon → coverage hunting → validasi adversarial → findings.json + REPORT.md. Pentest aktif terpisah: `penetration-testing-with-strix` |
-| **Artikel jurnal akademik** | `penelitian-iticm` | Tahap 0–13 step-by-step: kunci jurnal → isi per bab → PRISMA (SLR) → QC + cover letter + cek plagiarisme |
 
-> **RPS kampus = jalur lengkap:** `mk-iticm` memanggil `pptx-iticm`, `dev-methodology`, dan `obsidian-notes` di dalam alurnya — cek `SKILL.md` masing-masing utk dependency.
+> **RPS kampus = jalur lengkap:** `mk-iticm` memanggil `pptx-iticm`/`slidev-iticm`, `dev-methodology`, dan `obsidian-notes` di dalam alurnya — cek `SKILL.md` masing-masing utk dependency.
 > **Diagram:** `diagram-design` = snapshot flat di repo ini (folder `diagram-design/`),
 di-sync via `./sync.sh` dari mirror `ardith666/diagram-design` (upstream
 cathrynlavery/diagram-design).
